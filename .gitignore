@@ -9,7 +9,7 @@ npm-debug.*
 *.key
 *.mobileprovision
 *.orig.*
-myEnv.env
+.env
 web-build/
 
 
