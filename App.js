@@ -5,7 +5,7 @@ import { LogBox } from 'react-native';
 import SplashScreen from './screens/SplashScreen'
 import LoginScreen from './screens/LoginScreen'
 import SignUpScreen from './screens/SignUpScreen'
-import HomeScreen from './screens/HomeScreen'
+import BottomTabScreen from './screens/BottomTabScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -22,11 +22,11 @@ const App = () => {
 
   return (
     <NavigationContainer initialRouteName="SplashScreen">
-      <Stack.Navigator >
-        <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="SignUpScreen" component={SignUpScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="SplashScreen" component={SplashScreen} />
+        <Stack.Screen name="LoginScreen" component={LoginScreen} />
+        <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
+        <Stack.Screen name="HomeScreen" component={BottomTabScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

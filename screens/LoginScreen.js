@@ -12,7 +12,7 @@ const LoginScreen = () => {
   const navigation = useNavigation();
 
   return (
-    <ScrollView behavior='padding' style={styles.container}>
+    <ScrollView style={styles.container} >
       <StatusBar />
       <SafeAreaView style={styles.logoWrapper}>
         <Image

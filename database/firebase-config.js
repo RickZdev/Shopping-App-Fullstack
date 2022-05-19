@@ -1,14 +1,14 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
-import { doc, getFirestore, query, serverTimestamp, setDoc } from 'firebase/firestore'
+import { doc, getFirestore, onSnapshot, query, serverTimestamp, setDoc } from 'firebase/firestore'
 
 const firebaseConfig = {
   apiKey: "AIzaSyCRrjMVXW0zRWWBxIM9NFrr-CjT5_Vgpcs",
-  authDomain: process.env.REACT_NATIVE_APP_AUTH_DOMAIN,
-  projectId: process.env.REACT_NATIVE_APP_PROJECT_ID,
-  storageBucket: process.env.REACT_NATIVE_APP_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_NATIVE_APP_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_NATIVE_APP_APP_ID
+  authDomain: "shopping-app-be469.firebaseapp.com",
+  projectId: "shopping-app-be469",
+  storageBucket: "shopping-app-be469.appspot.com",
+  messagingSenderId: "780380821788",
+  appId: "1:780380821788:web:a5bd10bb51ea131b8402d9"
 };
 
 // Initialize Firebase
@@ -70,4 +70,16 @@ const logoutUser = async (navigation) => {
   }
 }
 
-export { auth, addAuthenticatedUser, loginUser, logoutUser }
+const getPopular = (setPopularDb) => {
+  const ref = doc(db, 'popular', 'New arrivals')
+  const unsubscribe = onSnapshot(ref, (field) => {
+    let tempDb = []
+    field.data().products.forEach((item) => {
+      tempDb.push(item);
+    })
+    setPopularDb(tempDb)
+  })
+  return unsubscribe;
+}
+
+export { auth, db, addAuthenticatedUser, loginUser, logoutUser, getPopular }

@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Animated, Dimensions, Image, StyleSheet, Text, View } from 'react-native'
 import LoginScreen from './LoginScreen';
-import HomeScreen from './HomeScreen';
+import HomeTab from './HomeTab';
+
 import { auth } from '../database/firebase-config'
+import BottomTabScreen from './BottomTabScreen';
 
 const SplashScreen = () => {
   const startAnimation = useRef(new Animated.Value(0)).current;
@@ -34,7 +36,7 @@ const SplashScreen = () => {
           />
         </Animated.View>
       </Animated.View>
-      {authenticatedUser ? <HomeScreen /> : <LoginScreen />}
+      {authenticatedUser ? <BottomTabScreen /> : <LoginScreen />}
     </View >
   )
 }
