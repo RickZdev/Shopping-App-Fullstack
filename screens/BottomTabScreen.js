@@ -43,7 +43,7 @@ const BottomTabScreen = () => {
             tabBarIcon: ({ focused }) => (
               <View>
                 <AntDesign name='shoppingcart' size={24} color={focused ? COLORS.black : 'gray'} />
-                <View style={{ position: 'absolute', right: -3, top: -3, backgroundColor: 'black', borderRadius: 10 }}>
+                <View style={{ position: 'absolute', right: -3, top: -3, backgroundColor: focused ? COLORS.black : 'gray', borderRadius: 10 }}>
                   <Text style={{ color: 'white', fontSize: 9, paddingHorizontal: 2, paddingVertical: 1 }}> 5 </Text>
                 </View>
               </View>
