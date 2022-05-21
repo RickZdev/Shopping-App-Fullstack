@@ -32,8 +32,6 @@ export default HorizontalCard
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: COLORS.white,
     paddingLeft: 37,
   },
   title: {

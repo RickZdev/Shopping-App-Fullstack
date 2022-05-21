@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
-import { doc, getFirestore, onSnapshot, query, serverTimestamp, setDoc } from 'firebase/firestore'
+import { collection, doc, getFirestore, onSnapshot, query, serverTimestamp, setDoc } from 'firebase/firestore'
 
 const firebaseConfig = {
   apiKey: "AIzaSyCRrjMVXW0zRWWBxIM9NFrr-CjT5_Vgpcs",
@@ -71,7 +71,7 @@ const logoutUser = async (navigation) => {
 }
 
 const getPopular = (setPopularDb) => {
-  const ref = doc(db, 'popular', 'New arrivals')
+  const ref = query(doc(db, 'popular', 'New arrivals'))
   const unsubscribe = onSnapshot(ref, (field) => {
     let tempDb = []
     field.data().products.forEach((item) => {
@@ -82,4 +82,15 @@ const getPopular = (setPopularDb) => {
   return unsubscribe;
 }
 
-export { auth, db, addAuthenticatedUser, loginUser, logoutUser, getPopular }
+const getCategories = (setCategories) => {
+  const ref = query(collection(db, 'categories'))
+  onSnapshot(ref, (snapshot) => {
+    let tempDb = []
+    snapshot.docs.forEach((doc) => {
+      tempDb.push(doc.data())
+    })
+    setCategories(tempDb)
+  })
+}
+
+export { auth, db, addAuthenticatedUser, loginUser, logoutUser, getPopular, getCategories }

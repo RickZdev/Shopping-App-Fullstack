@@ -12,6 +12,7 @@ const MenuDrawer = () => {
   const handlePressLogOut = () => {
     logoutUser(navigation);
   }
+
   return (
     <TouchableOpacity style={styles.menuWrapper} onPress={handlePressLogOut}>
       <Feather name='menu' size={25} style={styles.menu} />

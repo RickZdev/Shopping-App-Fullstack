@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, Image, TouchableOpacity, } from 'react-native'
 import FONTS from '../global/FONTS'
 
 const Banner = ({ headerTitle, customStyle }) => {
+
   return (
     <View style={[styles.container, customStyle]}>
       <Text style={styles.title}>{headerTitle}</Text>
@@ -21,15 +21,18 @@ export default Banner
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 37,
+    marginLeft: 37,
+    marginRight: 25
   },
+
   title: {
     fontSize: 18,
     fontFamily: FONTS.DMSansBold,
   },
+
   image: {
     width: '100%',
+    marginTop: 15,
   }
 })
