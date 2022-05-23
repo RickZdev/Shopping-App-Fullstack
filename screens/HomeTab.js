@@ -9,10 +9,14 @@ import CategoryCard from '../components/CategoryCard'
 import { getPopular } from '../database/firebase-config'
 
 const HomeScreen = () => {
-  const [popularDb, setPopularDb] = useState([]);
+  const [newArrival, setNewArrival] = useState([])
+  const [bestSellers, setBestSellers] = useState([])
 
   useEffect(() => {
-    getPopular(setPopularDb);
+    getPopular(setNewArrival, 'New arrivals');
+    getPopular(setBestSellers, 'Best sellers');
+    // console.log(newArrival)
+    // console.log(bestSellers)
   }, [])
 
   return (
@@ -27,10 +31,10 @@ const HomeScreen = () => {
           />
           <MenuDrawer />
         </View>
-        <HorizontalCard headerTitle={'New arrivals'} data={popularDb} customStyle={{ marginTop: 10 }} />
+        <HorizontalCard headerTitle={'New arrivals'} data={newArrival} customStyle={{ marginTop: 10 }} />
         <Banner headerTitle={'Vans Venice collection'} customStyle={{ marginTop: 30 }} />
         <CategoryCard headerTitle={'Shop by category'} />
-        <HorizontalCard headerTitle={'Best sellers'} data={popularDb} />
+        <HorizontalCard headerTitle={'Best sellers'} data={bestSellers} />
         <Banner headerTitle={'Vans Wayvee drop'} customStyle={{ marginTop: 15 }} />
       </SafeAreaView>
     </ScrollView>

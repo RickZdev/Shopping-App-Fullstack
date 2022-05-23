@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
-import { collection, doc, getFirestore, onSnapshot, query, serverTimestamp, setDoc } from 'firebase/firestore'
+import { addDoc, collection, doc, getDoc, getFirestore, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where } from 'firebase/firestore'
+import { ref, uploadBytes, getDownloadURL, getStorage } from 'firebase/storage'
 
 const firebaseConfig = {
   apiKey: "AIzaSyCRrjMVXW0zRWWBxIM9NFrr-CjT5_Vgpcs",
@@ -15,6 +16,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app)
 const auth = getAuth(app);
+const storage = getStorage(app)
 
 const addAuthenticatedUser = async (values) => {
   try {
@@ -70,8 +72,8 @@ const logoutUser = async (navigation) => {
   }
 }
 
-const getPopular = (setPopularDb) => {
-  const ref = query(doc(db, 'popular', 'New arrivals'))
+const getPopular = (setPopularDb, popular) => {
+  const ref = query(doc(db, 'popular', popular))
   const unsubscribe = onSnapshot(ref, (field) => {
     let tempDb = []
     field.data().products.forEach((item) => {
@@ -93,4 +95,59 @@ const getCategories = (setCategories) => {
   })
 }
 
-export { auth, db, addAuthenticatedUser, loginUser, logoutUser, getPopular, getCategories }
+const addToCategory = (categories) => {
+  const q = query(collection(db, 'products'), where('categories', '==', categories))
+  onSnapshot(q, async (snapshot) => {
+    let categoryDb = []
+    snapshot.docs.forEach((doc) => {
+      categoryDb.push({ ...doc.data(), id: doc.id });
+    })
+
+    await updateDoc(doc(db, 'categories', categories), {
+      products: [...categoryDb]
+    })
+  })
+  console.log("added to category")
+}
+
+const addToPopular = (popular) => {
+  const q = query(collection(db, 'products'), where('popular', '==', popular))
+  onSnapshot(q, async (snapshot) => {
+    let popularDb = []
+    snapshot.docs.forEach((doc) => {
+      popularDb.push({ ...doc.data(), id: doc.id });
+    })
+
+    await updateDoc(doc(db, 'popular', popular), {
+      products: [...popularDb]
+    })
+  })
+  console.log("added to popular")
+}
+
+const addProducts = async (values, sizes, imageUri) => {
+  const { categories, popular, description, quantity, productName, price } = values
+  const createdAt = serverTimestamp()
+  let imageURL = ''
+  if (imageUri !== '') {
+    const storageRef = ref(storage, `/images/products/${productName}`)
+
+    const img = await fetch(imageUri);
+    const bytes = await img.blob()
+
+    await uploadBytes(storageRef, bytes, { contentType: 'image/jpg' })
+    imageURL = await getDownloadURL(storageRef)
+  }
+
+  const productsCol = collection(db, 'products')
+  await addDoc(productsCol, {
+    categories, popular, description, quantity, productName, price, sizes, imageURL, createdAt
+  })
+
+  addToCategory(categories)
+  addToPopular(popular)
+
+  console.log('done!')
+}
+
+export { auth, db, addAuthenticatedUser, loginUser, logoutUser, getPopular, getCategories, addProducts }

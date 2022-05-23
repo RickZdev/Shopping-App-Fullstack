@@ -16,7 +16,7 @@ const HorizontalCard = ({ headerTitle, data, customStyle }) => {
           <View style={styles.cardContainer}>
             <TouchableOpacity>
               <Image
-                source={require('../assets/images/shoes.png')}
+                source={{ uri: item.imageURL }}
                 style={styles.image}
                 resizeMode='contain'
               />
@@ -52,5 +52,9 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     borderRadius: 10,
     elevation: 5,
+  },
+  image: {
+    width: 180,
+    height: 200,
   }
 })

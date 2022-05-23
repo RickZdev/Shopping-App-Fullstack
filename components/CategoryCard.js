@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
+import { FlatList, StyleSheet, Text, TouchableOpacity, View, Image, Button } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { getCategories } from '../database/firebase-config'
 import COLORS from '../global/COLORS';
@@ -8,7 +8,6 @@ const CategoryCard = ({ headerTitle }) => {
   const [categories, setCategories] = useState([]);
   useEffect(() => {
     getCategories(setCategories);
-    console.log(categories);
   }, [])
 
   return (
@@ -23,12 +22,8 @@ const CategoryCard = ({ headerTitle }) => {
         renderItem={({ item }) => (
           <View style={styles.cardContainer}>
             <TouchableOpacity>
-              {item.products.map(product => (
-                <>
-                </>
-              ))}
               <Image
-                source={require('../assets/images/categoryIcon.png')}
+                source={{ uri: item.icon }}
                 style={styles.image}
                 resizeMode='contain'
               />
@@ -39,7 +34,6 @@ const CategoryCard = ({ headerTitle }) => {
     </View>
   )
 }
-// jackets, shirts, socks, belts, pants, shoes
 export default CategoryCard
 
 const styles = StyleSheet.create({
@@ -60,5 +54,6 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
+    height: 120
   },
 })
