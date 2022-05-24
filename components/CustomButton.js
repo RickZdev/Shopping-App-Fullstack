@@ -3,6 +3,8 @@ import React from 'react'
 import COLORS from '../global/COLORS'
 import FONTS from '../global/FONTS'
 import { useNavigation } from '@react-navigation/native'
+import SHADOWS from '../global/SHADOWS'
+import { Octicons, Feather, AntDesign, Ionicons } from '@expo/vector-icons'
 
 const CustomMainButton = ({ text, handlePress, customStyle }) => {
   return (
@@ -25,7 +27,16 @@ const CustomTextButton = ({ text, handlePress, customStyle, customTextStyle }) =
   )
 }
 
-export { CustomMainButton, CustomTextButton }
+const CustomBackButton = () => {
+  const navigation = useNavigation();
+  return (
+    <TouchableOpacity style={styles.backWrapper} onPress={() => navigation.goBack()}>
+      <Feather name='chevron-left' size={25} style={styles.back} />
+    </TouchableOpacity >
+  )
+}
+
+export { CustomMainButton, CustomTextButton, CustomBackButton }
 
 const styles = StyleSheet.create({
   buttonContainer: {
@@ -52,5 +63,14 @@ const styles = StyleSheet.create({
     color: COLORS.black,
     fontWeight: 'bold',
     letterSpacing: 1,
+  },
+  backWrapper: {
+    backgroundColor: COLORS.white,
+    width: 40,
+    height: 40,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...SHADOWS.dark
   },
 })

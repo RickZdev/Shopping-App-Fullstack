@@ -15,8 +15,6 @@ const HomeScreen = () => {
   useEffect(() => {
     getPopular(setNewArrival, 'New arrivals');
     getPopular(setBestSellers, 'Best sellers');
-    // console.log(newArrival)
-    // console.log(bestSellers)
   }, [])
 
   return (

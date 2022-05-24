@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native'
 import COLORS from '../global/COLORS';
 import FONTS from '../global/FONTS'
+import { useNavigation } from '@react-navigation/native';
 
 const HorizontalCard = ({ headerTitle, data, customStyle }) => {
+  const navigation = useNavigation();
   return (
     <View style={[styles.container, customStyle]}>
       <Text style={styles.title}>{headerTitle}</Text>
@@ -14,7 +16,7 @@ const HorizontalCard = ({ headerTitle, data, customStyle }) => {
         keyExtractor={(item => item.id)}
         renderItem={({ item }) => (
           <View style={styles.cardContainer}>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('ProductDetailsScreen', item)}>
               <Image
                 source={{ uri: item.imageURL }}
                 style={styles.image}
