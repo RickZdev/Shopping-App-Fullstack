@@ -14,8 +14,8 @@ const HorizontalCard = ({ headerTitle, data, customStyle }) => {
         showsHorizontalScrollIndicator={false}
         data={data}
         keyExtractor={(item => item.id)}
-        renderItem={({ item }) => (
-          <View style={styles.cardContainer}>
+        renderItem={({ item, index }) => (
+          <View style={[styles.cardContainer, { marginLeft: index === 0 ? 12 : 0 }]}>
             <TouchableOpacity onPress={() => navigation.navigate('ProductDetailsScreen', item)}>
               <Image
                 source={{ uri: item.imageURL }}
@@ -33,14 +33,12 @@ const HorizontalCard = ({ headerTitle, data, customStyle }) => {
 export default HorizontalCard
 
 const styles = StyleSheet.create({
-  container: {
-    paddingLeft: 37,
-  },
   title: {
     color: COLORS.black,
     fontSize: 21,
     fontFamily: FONTS.DMSansBold,
-    marginBottom: 16
+    marginBottom: 16,
+    paddingLeft: 37
   },
   cardContainer: {
     backgroundColor: COLORS.white,

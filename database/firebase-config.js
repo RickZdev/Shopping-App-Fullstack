@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
-import { addDoc, collection, doc, getDoc, getFirestore, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where } from 'firebase/firestore'
+import { addDoc, collection, doc, getDoc, getFirestore, onSnapshot, orderBy, query, serverTimestamp, setDoc, updateDoc, where } from 'firebase/firestore'
 import { ref, uploadBytes, getDownloadURL, getStorage } from 'firebase/storage'
 
 const firebaseConfig = {
@@ -112,6 +112,7 @@ const addToCategory = (categories) => {
 
 const addToPopular = (popular) => {
   const q = query(collection(db, 'products'), where('popular', '==', popular))
+
   onSnapshot(q, async (snapshot) => {
     let popularDb = []
     snapshot.docs.forEach((doc) => {

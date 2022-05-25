@@ -31,7 +31,7 @@ const HomeScreen = () => {
         </View>
         <HorizontalCard headerTitle={'New arrivals'} data={newArrival} customStyle={{ marginTop: 10 }} />
         <Banner headerTitle={'Vans Venice collection'} customStyle={{ marginTop: 30 }} />
-        <CategoryCard headerTitle={'Shop by category'} />
+        <CategoryCard headerTitle={"Shop by Category"} />
         <HorizontalCard headerTitle={'Best sellers'} data={bestSellers} />
         <Banner headerTitle={'Vans Wayvee drop'} customStyle={{ marginTop: 15 }} />
       </SafeAreaView>

@@ -28,8 +28,8 @@ const ProductDetailsScreen = ({ route }) => {
             <Text style={{ fontSize: 18, fontFamily: FONTS.DMSansBold }}>R {product.price}</Text>
           </View>
           <View style={styles.bottom}>
-            {product.sizes.map(item => (
-              <TouchableOpacity style={styles.bottomLeft}>
+            {product.sizes.map((item, index) => (
+              <TouchableOpacity key={index} style={styles.bottomLeft}>
                 <Text style={{ color: COLORS.white, fontFamily: FONTS.DMSansBold }}>{item.charAt(0).toUpperCase()}</Text>
               </TouchableOpacity>
             ))}
