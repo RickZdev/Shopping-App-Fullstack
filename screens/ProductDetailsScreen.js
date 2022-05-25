@@ -1,11 +1,9 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView } from 'react-native'
 import React from 'react'
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
+import { CustomBackButton, CustomSizesButton } from '../components/CustomButton'
+import { AntDesign } from '@expo/vector-icons'
 import COLORS from '../global/COLORS'
-import MenuDrawer from '../components/MenuDrawer'
 import FONTS from '../global/FONTS'
-import SizeButton from '../components/SizeButton'
-import { CustomBackButton } from '../components/CustomButton'
-import { Octicons, Feather, AntDesign, Ionicons } from '@expo/vector-icons'
 
 const ProductDetailsScreen = ({ route }) => {
   const product = route.params;
@@ -28,11 +26,7 @@ const ProductDetailsScreen = ({ route }) => {
             <Text style={{ fontSize: 18, fontFamily: FONTS.DMSansBold }}>R {product.price}</Text>
           </View>
           <View style={styles.bottom}>
-            {product.sizes.map((item, index) => (
-              <TouchableOpacity key={index} style={styles.bottomLeft}>
-                <Text style={{ color: COLORS.white, fontFamily: FONTS.DMSansBold }}>{item.charAt(0).toUpperCase()}</Text>
-              </TouchableOpacity>
-            ))}
+            <CustomSizesButton data={product} />
             <TouchableOpacity style={styles.bottomRight}>
               <AntDesign name='shoppingcart' size={30} color={COLORS.white} />
             </TouchableOpacity>
@@ -91,15 +85,6 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     marginTop: 30,
   },
-  bottomLeft: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 35,
-    height: 35,
-    borderRadius: 20,
-    backgroundColor: COLORS.gray,
-    marginRight: 5,
-  },
   bottomRight: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -113,41 +98,4 @@ const styles = StyleSheet.create({
     bottom: 0,
     marginRight: 40,
   },
-
-
-
-
-
-
-
-
-
-
-  // bottomPart: {
-  //   marginTop: 15,
-  //   alignSelf: 'flex-start',
-  //   alignItems: 'flex-end',
-  //   flexDirection: 'row',
-  //   marginLeft: 25,
-  //   marginBottom: 50,
-  // },
-  // sizes: {
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   width: 35,
-  //   height: 35,
-  //   borderRadius: 20,
-  //   marginRight: 5,
-  //   backgroundColor: COLORS.gray,
-  // },
-  // addToCart: {
-  //   marginLeft: 90,
-  //   alignSelf: 'flex-start',
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  //   width: 60,
-  //   height: 60,
-  //   borderRadius: 30,
-  //   backgroundColor: COLORS.gray,
-  // }
 })

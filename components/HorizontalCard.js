@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native'
+import { useNavigation } from '@react-navigation/native';
 import COLORS from '../global/COLORS';
 import FONTS from '../global/FONTS'
-import { useNavigation } from '@react-navigation/native';
 
 const HorizontalCard = ({ headerTitle, data, customStyle }) => {
   const navigation = useNavigation();

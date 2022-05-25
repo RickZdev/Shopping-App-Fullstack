@@ -1,10 +1,12 @@
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import React from 'react'
+import { StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { logoutUser } from '../database/firebase-config'
+import { Feather } from '@expo/vector-icons'
 import COLORS from '../global/COLORS'
 import FONTS from '../global/FONTS'
-import { useNavigation } from '@react-navigation/native'
 import SHADOWS from '../global/SHADOWS'
-import { Octicons, Feather, AntDesign, Ionicons } from '@expo/vector-icons'
+
 
 const CustomMainButton = ({ text, handlePress, customStyle }) => {
   return (
@@ -17,7 +19,6 @@ const CustomMainButton = ({ text, handlePress, customStyle }) => {
 }
 
 const CustomTextButton = ({ text, handlePress, customStyle, customTextStyle }) => {
-  const navigation = useNavigation();
   return (
     <>
       <TouchableOpacity style={[styles.formRegister, customStyle]} onPress={handlePress}>
@@ -36,7 +37,29 @@ const CustomBackButton = () => {
   )
 }
 
-export { CustomMainButton, CustomTextButton, CustomBackButton }
+const CustomMenuDrawerButton = () => {
+  const navigation = useNavigation();
+
+  return (
+    <TouchableOpacity style={styles.menuWrapper} onPress={() => navigation.openDrawer()}>
+      <Feather name='menu' size={25} style={styles.menu} />
+    </TouchableOpacity>
+  )
+}
+
+const CustomSizesButton = ({ data }) => {
+  return (
+    <>
+      {data.sizes.map((item, index) => (
+        <TouchableOpacity key={index} style={styles.sizesContainer}>
+          <Text style={styles.sizesText}>{item.charAt(0).toUpperCase()}</Text>
+        </TouchableOpacity>
+      ))}
+    </>
+  )
+}
+
+export { CustomMainButton, CustomTextButton, CustomBackButton, CustomMenuDrawerButton, CustomSizesButton }
 
 const styles = StyleSheet.create({
   buttonContainer: {
@@ -73,4 +96,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     ...SHADOWS.dark
   },
+  menuWrapper: {
+    backgroundColor: COLORS.white,
+    width: 54,
+    height: 54,
+    borderRadius: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...SHADOWS.dark
+  },
+  sizesContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 35,
+    height: 35,
+    borderRadius: 20,
+    backgroundColor: COLORS.gray,
+    marginRight: 5,
+  },
+  sizesText: {
+    color: COLORS.white,
+    fontFamily: FONTS.DMSansBold
+  }
 })

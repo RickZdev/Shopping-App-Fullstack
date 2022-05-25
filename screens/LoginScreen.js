@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View, StatusBar, Image, SafeAreaView, TextInput, KeyboardAvoidingView, Button, TouchableOpacity, ScrollView, KeyboardAvoidingAwareScroll } from 'react-native'
+import { StyleSheet, View, StatusBar, Image, SafeAreaView, ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { Formik } from 'formik'
 import { CustomPasswordInput, CustomTextInput } from '../components/CustomInput'

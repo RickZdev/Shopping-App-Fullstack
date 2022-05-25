@@ -1,9 +1,9 @@
-import { FlatList, StyleSheet, Text, TouchableOpacity, View, Image, Button, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import { FlatList, StyleSheet, Text, TouchableOpacity, View, Image, Button, Alert } from 'react-native'
 import { getCategories } from '../database/firebase-config'
+import { useNavigation } from '@react-navigation/native';
 import COLORS from '../global/COLORS';
 import FONTS from '../global/FONTS';
-import { useNavigation } from '@react-navigation/native';
 
 const CategoryCard = ({ headerTitle }) => {
   const navigation = useNavigation();

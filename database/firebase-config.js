@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
+import { addDoc, collection, doc, getFirestore, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where } from 'firebase/firestore'
 import { getAuth, updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
-import { addDoc, collection, doc, getDoc, getFirestore, onSnapshot, orderBy, query, serverTimestamp, setDoc, updateDoc, where } from 'firebase/firestore'
 import { ref, uploadBytes, getDownloadURL, getStorage } from 'firebase/storage'
 
 const firebaseConfig = {
@@ -21,12 +21,10 @@ const storage = getStorage(app)
 const addAuthenticatedUser = async (values) => {
   try {
     const { fullName, email, phoneNumber, password } = values;
-    console.log(fullName, email, phoneNumber, password)
     const { user } = await createUserWithEmailAndPassword(auth, email, password)
     await updateProfile(auth.currentUser, {
       displayName: fullName,
     })
-    console.log("user created successfully!", user.displayName)
     await addUserToDatabase(user, { phoneNumber })
   } catch (error) {
     console.log(error.message)
@@ -46,7 +44,6 @@ const addUserToDatabase = async (user, additionalData) => {
       phoneNumber,
       createdAt: serverTimestamp()
     })
-    console.log("user added to database successfully!")
   } catch (error) {
     console.log(error.message, "error creating user!")
   }
@@ -56,7 +53,6 @@ const loginUser = async (email, password, navigation) => {
   try {
     const { user } = await signInWithEmailAndPassword(auth, email, password)
     navigation.replace('HomeScreen');
-    console.log('User Logged In!', user.email);
   } catch (error) {
     console.log(error.message)
   }
@@ -66,7 +62,6 @@ const logoutUser = async (navigation) => {
   try {
     await signOut(auth)
     navigation.replace('LoginScreen');
-    console.log("User Logged Out!")
   } catch (error) {
     console.log(error.message)
   }
@@ -107,7 +102,6 @@ const addToCategory = (categories) => {
       products: [...categoryDb]
     })
   })
-  console.log("added to category")
 }
 
 const addToPopular = (popular) => {
@@ -123,7 +117,6 @@ const addToPopular = (popular) => {
       products: [...popularDb]
     })
   })
-  console.log("added to popular")
 }
 
 const addProducts = async (values, sizes, imageUri) => {
@@ -147,8 +140,6 @@ const addProducts = async (values, sizes, imageUri) => {
 
   addToCategory(categories)
   addToPopular(popular)
-
-  console.log('done!')
 }
 
 export { auth, db, addAuthenticatedUser, loginUser, logoutUser, getPopular, getCategories, addProducts }

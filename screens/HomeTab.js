@@ -1,14 +1,13 @@
-import { StyleSheet, Text, View, StatusBar, TouchableOpacity, SafeAreaView, ScrollView, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import COLORS from '../global/COLORS'
-import SHADOWS from '../global/SHADOWS'
-import MenuDrawer from '../components/MenuDrawer'
+import { StyleSheet, View, StatusBar, SafeAreaView, ScrollView, Image } from 'react-native'
+import { CustomMenuDrawerButton } from '../components/CustomButton'
+import { getPopular } from '../database/firebase-config'
+import CategoryCard from '../components/CategoryCard'
 import HorizontalCard from '../components/HorizontalCard'
 import Banner from '../components/Banner'
-import CategoryCard from '../components/CategoryCard'
-import { getPopular } from '../database/firebase-config'
+import COLORS from '../global/COLORS'
 
-const HomeScreen = () => {
+const HomeTab = () => {
   const [newArrival, setNewArrival] = useState([])
   const [bestSellers, setBestSellers] = useState([])
 
@@ -27,7 +26,7 @@ const HomeScreen = () => {
             resizeMode='contain'
             style={styles.logo}
           />
-          <MenuDrawer />
+          <CustomMenuDrawerButton />
         </View>
         <HorizontalCard headerTitle={'New arrivals'} data={newArrival} customStyle={{ marginTop: 10 }} />
         <Banner headerTitle={'Vans Venice collection'} customStyle={{ marginTop: 30 }} />
@@ -39,7 +38,7 @@ const HomeScreen = () => {
   )
 }
 
-export default HomeScreen
+export default HomeTab
 
 const styles = StyleSheet.create({
   container: {

@@ -1,11 +1,11 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import COLORS from '../global/COLORS'
-import MenuDrawer from '../components/MenuDrawer';
+import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { CustomMenuDrawerButton } from '../components/CustomButton';
 import CategoryList from '../components/CategoryList';
+import COLORS from '../global/COLORS'
 import FONTS from '../global/FONTS';
 
-const CategoryScreen = ({ navigation, route }) => {
+const CategoryScreen = ({ route }) => {
   const product = route.params;
   const headerName = product[0] ? product[0].categories.charAt(0).toUpperCase() + product[0].categories.slice(1) : 'Null';
   return (
@@ -17,7 +17,7 @@ const CategoryScreen = ({ navigation, route }) => {
         ListHeaderComponent={() => (
           <View style={styles.header}>
             <Text style={styles.headerTitle}>{headerName}</Text>
-            <MenuDrawer />
+            <CustomMenuDrawerButton />
           </View>
         )}
       />

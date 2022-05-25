@@ -1,18 +1,11 @@
-import { NavigationContainer } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import 'react-native-gesture-handler'
+import { NavigationContainer } from '@react-navigation/native';
 import { useFonts } from 'expo-font'
 import { LogBox } from 'react-native';
-import SplashScreen from './screens/SplashScreen'
-import LoginScreen from './screens/LoginScreen'
-import SignUpScreen from './screens/SignUpScreen'
-import CategoryScreen from './screens/CategoryScreen'
-import ProductDetailsScreen from './screens/ProductDetailsScreen';
-import BottomTabScreen from './screens/BottomTabScreen';
-
-const Stack = createNativeStackNavigator();
+import AuthStack from './navigation/AuthStack';
 
 const App = () => {
-  // hidden yellow warning
+  // hidden yellow warnings
   LogBox.ignoreLogs(['Warning: AsyncStorage has been extracted from react-native core']);
   LogBox.ignoreAllLogs(true)
 
@@ -24,13 +17,7 @@ const App = () => {
 
   return (
     <NavigationContainer initialRouteName="SplashScreen">
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="SplashScreen" component={SplashScreen} />
-        <Stack.Screen name="LoginScreen" component={LoginScreen} />
-        <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
-        <Stack.Screen name="CategoryScreen" component={CategoryScreen} />
-        <Stack.Screen name="HomeScreen" component={BottomTabScreen} />
-      </Stack.Navigator>
+      <AuthStack />
     </NavigationContainer>
   );
 }

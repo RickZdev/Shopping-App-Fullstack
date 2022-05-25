@@ -1,16 +1,14 @@
-import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View, Image, Button, } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import { SafeAreaView, ScrollView, StyleSheet, Text, View, Image, Button, } from 'react-native'
+import { CustomMainButton } from '../components/CustomButton'
+import { CustomTextInput } from '../components/CustomInput'
 import { Formik } from 'formik'
-import CheckBox from 'expo-checkbox';
-import { CustomPasswordInput, CustomTextInput } from '../components/CustomInput'
-import { CustomMainButton, CustomTextButton } from '../components/CustomButton'
-import { Feather } from '@expo/vector-icons'
 import { Picker } from "@react-native-picker/picker";
+import { addProducts } from '../database/firebase-config';
 import COLORS from '../global/COLORS'
 import FONTS from '../global/FONTS'
+import CheckBox from 'expo-checkbox';
 import * as ImagePicker from 'expo-image-picker'
-import { addProducts, db, getCategories } from '../database/firebase-config';
-import { collection, query, where } from 'firebase/firestore';
 
 const SettingsTab = () => {
   const [smallCheckbox, setSmallCheckbox] = useState(false)

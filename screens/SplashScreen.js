@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Animated, Dimensions, Image, StyleSheet, Text, View } from 'react-native'
-import LoginScreen from './LoginScreen';
-import HomeTab from './HomeTab';
-
+import { Animated, Dimensions, Image, StyleSheet, View } from 'react-native'
 import { auth } from '../database/firebase-config'
-import BottomTabScreen from './BottomTabScreen';
+import LoginScreen from './LoginScreen';
+import MenuDrawer from '../navigation/MenuDrawer';
 
 const SplashScreen = () => {
   const startAnimation = useRef(new Animated.Value(0)).current;
@@ -21,7 +19,7 @@ const SplashScreen = () => {
         setAuthenticatedUser(user)
       })
 
-      return (() => unsubscribe)
+      return (() => unsubscribe())
     }, 4000)
   }, [])
 
@@ -36,7 +34,7 @@ const SplashScreen = () => {
           />
         </Animated.View>
       </Animated.View>
-      {authenticatedUser ? <BottomTabScreen /> : <LoginScreen />}
+      {authenticatedUser ? <MenuDrawer /> : <LoginScreen />}
     </View >
   )
 }

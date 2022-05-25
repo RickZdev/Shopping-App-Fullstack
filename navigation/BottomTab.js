@@ -1,29 +1,16 @@
-import { View, StyleSheet, StatusBar, Text, TouchableOpacity } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import HomeTab from './HomeTab'
-import SearchTab from './SearchTab'
-import SettingsTab from './SettingsTab'
-import CategoryScreen from './CategoryScreen'
-import CartTab from './CartTab'
-import ProductDetailsScreen from './ProductDetailsScreen';
-import COLORS from '../global/COLORS';
+import React from 'react'
+import { View, StyleSheet, StatusBar, Text } from 'react-native';
 import { Octicons, Feather, AntDesign, Ionicons } from '@expo/vector-icons'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { HomeStack } from '../navigation/AppStack';
+import SearchTab from '../screens/SearchTab'
+import SettingsTab from '../screens/SettingsTab'
+import CartTab from '../screens/CartTab'
+import COLORS from '../global/COLORS';
 
 const Tab = createBottomTabNavigator();
-const Stack = createNativeStackNavigator();
 
-const HomeStackScreen = () => {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="HomeStack" component={HomeTab} />
-      <Stack.Screen name="CategoryScreen" component={CategoryScreen} />
-      <Stack.Screen name="ProductDetailsScreen" component={ProductDetailsScreen} />
-    </Stack.Navigator>
-  )
-}
-
-const BottomTabScreen = () => {
+const BottomTab = () => {
   return (
     <View style={styles.container}>
       <StatusBar />
@@ -39,7 +26,7 @@ const BottomTabScreen = () => {
           tabBarHideOnKeyboard: true,
         }}
       >
-        <Tab.Screen name="HomeTab" component={HomeStackScreen}
+        <Tab.Screen name="HomeStack" component={HomeStack}
           options={{
             tabBarIcon: ({ focused }) => (
               <Octicons name='home' size={22} color={focused ? COLORS.black : 'gray'} />
@@ -77,7 +64,7 @@ const BottomTabScreen = () => {
   )
 }
 
-export default BottomTabScreen;
+export default BottomTab;
 
 const styles = StyleSheet.create({
   container: {

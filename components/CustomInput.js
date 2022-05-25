@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import COLORS from '../global/COLORS'
 import FONTS from '../global/FONTS'
 import { Feather } from '@expo/vector-icons'
