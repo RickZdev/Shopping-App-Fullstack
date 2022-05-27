@@ -2,7 +2,7 @@ import React from 'react'
 import { View, StyleSheet, StatusBar, Text } from 'react-native';
 import { Octicons, Feather, AntDesign, Ionicons } from '@expo/vector-icons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { HomeStack } from '../navigation/AppStack';
+import { HomeStack } from './AppStack';
 import SearchTab from '../screens/SearchTab'
 import SettingsTab from '../screens/SettingsTab'
 import CartTab from '../screens/CartTab'

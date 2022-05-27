@@ -16,7 +16,7 @@ const LoginScreen = () => {
       <StatusBar />
       <SafeAreaView style={styles.logoWrapper}>
         <Image
-          source={require("../assets/images/officialLogo.png")}
+          source={require("../../assets/images/officialLogo.png")}
           resizeMode='contain'
           style={styles.logo}
         />

@@ -14,7 +14,7 @@ const SignUpScreen = ({ navigation }) => {
       <SafeAreaView style={styles.container}>
         <View style={styles.logoWrapper}>
           <Image
-            source={require('../assets/images/officialLogo.png')}
+            source={require('../../assets/images/officialLogo.png')}
           />
         </View>
         <Text style={styles.registerText}>REGISTER</Text>

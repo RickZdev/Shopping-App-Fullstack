@@ -7,7 +7,7 @@ const Banner = ({ headerTitle, customStyle }) => {
       <Text style={styles.title}>{headerTitle}</Text>
       <TouchableOpacity style={styles.imageWrapper}>
         <Image
-          source={require('../assets/images/banner1.png')}
+          source={require('../../assets/images/banner1.png')}
           resizeMode='contain'
           style={styles.image}
         />

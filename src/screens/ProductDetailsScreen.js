@@ -1,14 +1,23 @@
-import React from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import { CustomBackButton, CustomSizesButton } from '../components/CustomButton'
 import { AntDesign } from '@expo/vector-icons'
+import CustomBottomSheet from '../components/CustomBottomSheet'
 import COLORS from '../global/COLORS'
 import FONTS from '../global/FONTS'
 
 const ProductDetailsScreen = ({ route }) => {
   const product = route.params;
+  const bottomSheetRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleOpenBottomSheet = useCallback((index) => {
+    bottomSheetRef.current?.snapToIndex(index);
+    setIsOpen(true);
+  }, [])
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container,]}>
       <View style={styles.cardContainer}>
         <View style={styles.header}>
           <CustomBackButton />
@@ -17,7 +26,7 @@ const ProductDetailsScreen = ({ route }) => {
           <View style={styles.imageWrapper}>
             <Image
               source={{ uri: product.imageURL }}
-              style={styles.image}
+              style={[styles.image,]}
             />
           </View>
           <View style={styles.middlePart}>
@@ -27,12 +36,15 @@ const ProductDetailsScreen = ({ route }) => {
           </View>
           <View style={styles.bottom}>
             <CustomSizesButton data={product} />
-            <TouchableOpacity style={styles.bottomRight}>
+            <TouchableOpacity style={styles.bottomRight} onPress={() => handleOpenBottomSheet(0)}>
               <AntDesign name='shoppingcart' size={30} color={COLORS.white} />
             </TouchableOpacity>
           </View>
         </View>
       </View>
+      {
+        isOpen ? <CustomBottomSheet bottomSheetRef={bottomSheetRef} isOpenBottomSheet={setIsOpen} /> : null
+      }
     </View>
   )
 }

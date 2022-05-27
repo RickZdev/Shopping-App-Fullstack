@@ -28,7 +28,7 @@ const SplashScreen = () => {
       <Animated.View style={[styles.splashScreenContainer, { transform: [{ translateY: startAnimation }] }]}>
         <Animated.View style={{ alignItems: 'center', justifyContent: 'center' }}>
           <Image
-            source={require("../assets/images/splashScreenLogo.png")}
+            source={require("../../assets/images/splashScreenLogo.png")}
             resizeMode='contain'
             style={{ width: 100, height: 100 }}
           />
