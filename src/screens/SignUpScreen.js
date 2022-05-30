@@ -20,8 +20,13 @@ const SignUpScreen = ({ navigation }) => {
         <Text style={styles.registerText}>REGISTER</Text>
         <Formik
           initialValues={{ fullName: '', email: '', phoneNumber: '', password: '', confirmPassword: '' }}
-          onSubmit={(values) => {
-            { values.password === values.confirmPassword ? addAuthenticatedUser(values) : console.log('wrong password') }
+          onSubmit={(values, { resetForm }) => {
+            if (values.password === values.confirmPassword) {
+              addAuthenticatedUser(values, navigation)
+              resetForm()
+            } else {
+              console.log('wrong password')
+            }
           }}
         >
           {(formikProps) => (

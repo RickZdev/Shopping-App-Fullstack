@@ -4,7 +4,6 @@ import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
 
 const CustomBottomSheet = ({ bottomSheetRef, isOpenBottomSheet }) => {
   const snapPoints = useMemo(() => ['35%', '100%'], []);
-
   const handleSheetChanges = useCallback((index) => {
     console.log('HandleSheetChanges', index);
   }, [])

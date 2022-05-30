@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { StyleSheet, View, StatusBar, SafeAreaView, ScrollView, Image } from 'react-native'
 import { CustomMenuDrawerButton } from '../components/CustomButton'
 import { getPopular, logoutUser } from '../database/firebase-config'
@@ -13,10 +13,18 @@ const HomeTab = () => {
   const navigation = useNavigation()
   const [newArrival, setNewArrival] = useState([])
   const [bestSellers, setBestSellers] = useState([])
+  const isMounted = useRef(true)
 
   useEffect(() => {
-    getPopular(setNewArrival, 'New arrivals');
-    getPopular(setBestSellers, 'Best sellers');
+    return () => {
+      isMounted.current = false;
+    }
+  }, [])
+
+
+  useEffect(() => {
+    getPopular(setNewArrival, 'New arrivals', isMounted)
+    getPopular(setBestSellers, 'Best sellers', isMounted)
   }, [])
 
   const handleLogoutUser = () => {

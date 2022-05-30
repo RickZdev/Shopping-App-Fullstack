@@ -5,6 +5,7 @@ import { AntDesign } from '@expo/vector-icons'
 import CustomBottomSheet from '../components/CustomBottomSheet'
 import COLORS from '../global/COLORS'
 import FONTS from '../global/FONTS'
+import { addToCart } from '../database/firebase-config';
 
 const ProductDetailsScreen = ({ route }) => {
   const product = route.params;
@@ -14,6 +15,7 @@ const ProductDetailsScreen = ({ route }) => {
   const handleOpenBottomSheet = useCallback((index) => {
     bottomSheetRef.current?.snapToIndex(index);
     setIsOpen(true);
+    addToCart(product)
   }, [])
 
   return (
@@ -43,6 +45,7 @@ const ProductDetailsScreen = ({ route }) => {
         </View>
       </View>
       {
+        // bottom sheet
         isOpen ? <CustomBottomSheet bottomSheetRef={bottomSheetRef} isOpenBottomSheet={setIsOpen} /> : null
       }
     </View>
@@ -83,8 +86,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 25,
   },
   image: {
-    width: 200,
-    height: 200
+    width: '100%',
+    height: '80%'
   },
   middlePart: {
     marginTop: 26,

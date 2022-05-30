@@ -7,6 +7,14 @@ import MenuDrawer from '../navigation/MenuDrawer';
 const SplashScreen = () => {
   const startAnimation = useRef(new Animated.Value(0)).current;
   const [authenticatedUser, setAuthenticatedUser] = useState(false);
+  const isMounted = useRef(true)
+
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    }
+  })
+
   useEffect(() => {
     setTimeout(() => {
       Animated.sequence([
@@ -16,10 +24,11 @@ const SplashScreen = () => {
         })]).start();
 
       const unsubscribe = auth.onAuthStateChanged(user => {
-        setAuthenticatedUser(user)
+        if (isMounted.current) {
+          setAuthenticatedUser(user)
+        }
       })
-
-      return (() => unsubscribe())
+      return () => unsubscribe()
     }, 4000)
   }, [])
 

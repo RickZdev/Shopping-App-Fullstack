@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { addDoc, collection, doc, getFirestore, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where } from 'firebase/firestore'
+import { addDoc, collection, doc, getFirestore, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where, getDoc } from 'firebase/firestore'
 import { getAuth, updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { ref, uploadBytes, getDownloadURL, getStorage } from 'firebase/storage'
 
@@ -18,10 +18,11 @@ const db = getFirestore(app)
 const auth = getAuth(app);
 const storage = getStorage(app)
 
-const addAuthenticatedUser = async (values) => {
+const addAuthenticatedUser = async (values, navigation) => {
   try {
     const { fullName, email, phoneNumber, password } = values;
     const { user } = await createUserWithEmailAndPassword(auth, email, password)
+    navigation.goBack();
     await updateProfile(auth.currentUser, {
       displayName: fullName,
     })
@@ -42,6 +43,7 @@ const addUserToDatabase = async (user, additionalData) => {
       fullName: displayName,
       email,
       phoneNumber,
+      cart: [],
       createdAt: serverTimestamp()
     })
   } catch (error) {
@@ -67,16 +69,17 @@ const logoutUser = async (navigation) => {
   }
 }
 
-const getPopular = (setPopularDb, popular) => {
+const getPopular = (setPopularDb, popular, isMounted) => {
   const ref = query(doc(db, 'popular', popular))
-  const unsubscribe = onSnapshot(ref, (field) => {
+  onSnapshot(ref, (field) => {
     let tempDb = []
     field.data().products.forEach((item) => {
       tempDb.push(item);
     })
-    setPopularDb(tempDb)
+    if (isMounted.current) {
+      setPopularDb(tempDb)
+    }
   })
-  return unsubscribe;
 }
 
 const getCategories = (setCategories) => {
@@ -88,6 +91,33 @@ const getCategories = (setCategories) => {
     })
     setCategories(tempDb)
   })
+}
+
+const getCart = (setCartDb, setTotal) => {
+  const q = query(doc(db, 'users', auth.currentUser.uid));
+  onSnapshot(q, snapshot => {
+    let tempCartDb = []
+    let tempTotalPrice = 0
+    snapshot.data().cart.map((product) => {
+      tempCartDb.push(product)
+      tempTotalPrice += parseInt(product.price);
+    })
+
+    setTotal(tempTotalPrice)
+    setCartDb(tempCartDb)
+  })
+}
+
+const addToCart = (product) => {
+  const q = query(doc(db, 'users', auth.currentUser.uid));
+  getDoc(q)
+    .then(async (field) => {
+      const generatedId = Math.floor(Math.random() * 10000) + 1;
+      product.cartId = product.id + generatedId.toString();
+      await updateDoc(q, {
+        cart: [...field.data()?.cart, product]
+      })
+    })
 }
 
 const addToCategory = (categories) => {
@@ -106,7 +136,6 @@ const addToCategory = (categories) => {
 
 const addToPopular = (popular) => {
   const q = query(collection(db, 'products'), where('popular', '==', popular))
-
   onSnapshot(q, async (snapshot) => {
     let popularDb = []
     snapshot.docs.forEach((doc) => {
@@ -142,4 +171,4 @@ const addProducts = async (values, sizes, imageUri) => {
   addToPopular(popular)
 }
 
-export { auth, db, addAuthenticatedUser, loginUser, logoutUser, getPopular, getCategories, addProducts }
+export { auth, db, addAuthenticatedUser, loginUser, logoutUser, getPopular, getCategories, getCart, addProducts, addToCart }
