@@ -4,8 +4,10 @@ import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
 import COLORS from '../global/COLORS';
 import { addToCart } from '../database/firebase-config';
 import { CustomMainButton } from './CustomButton';
+import { useNavigation } from '@react-navigation/native';
 
 const CustomBottomSheet = ({ bottomSheetRef, isOpenBottomSheet, setQuantity, quantity, product, size }) => {
+  const navigation = useNavigation();
   const snapPoints = useMemo(() => ['35%'], []);
   const handleSheetChanges = useCallback((index) => {
     console.log('HandleSheetChanges', index);
@@ -26,6 +28,7 @@ const CustomBottomSheet = ({ bottomSheetRef, isOpenBottomSheet, setQuantity, qua
     } else if (quantity > 0) {
       addToCart(product, quantity, size)
       isOpenBottomSheet(false)
+      navigation.jumpTo('CartTab');
     } else {
       Alert.alert('', 'You should add a quantity! Please try again.', [{ text: "Got it", onPress: () => { } }]);
     }
