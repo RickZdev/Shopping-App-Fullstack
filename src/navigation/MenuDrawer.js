@@ -9,7 +9,7 @@ const Drawer = createDrawerNavigator();
 const MenuDrawer = () => {
   return (
     <View style={styles.container}>
-      <Drawer.Navigator screenOptions={{ headerShown: false, drawerPosition: "right", drawerType: 'slide' }} >
+      <Drawer.Navigator screenOptions={{ headerShown: false, drawerPosition: "right", drawerType: 'front' }} >
         <Drawer.Screen name="HomeDrawer" component={BottomTab} />
       </Drawer.Navigator>
     </View>

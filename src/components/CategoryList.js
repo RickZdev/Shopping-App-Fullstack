@@ -4,31 +4,35 @@ import { useNavigation } from '@react-navigation/native'
 import COLORS from '../global/COLORS'
 import FONTS from '../global/FONTS'
 
-const CategoryList = ({ data }) => {
+const CategoryList = ({ data, customDeleteButton, customOrderSize, disableNavigation }) => {
   const navigation = useNavigation();
   return (
-    <TouchableOpacity style={styles.cardContainer} activeOpacity={0.9} onPress={() => navigation.navigate('ProductDetailsScreen', data)}>
+    <TouchableOpacity style={styles.cardContainer} activeOpacity={1} onPress={!disableNavigation ? () => navigation.navigate('ProductDetailsScreen', data) : null}>
       <View style={styles.cardContainerWrapper}>
         <View style={styles.leftCard}>
           <Image
             source={{ uri: data.imageURL }}
-            resizeMode='contain'
+            resizeMode='cover'
             style={styles.image}
           />
         </View>
         <View style={styles.rightCard}>
-          <Text style={{ fontSize: 14, fontFamily: FONTS.DMSansBold }}>{data.productName}</Text>
+          <Text style={{ fontSize: 14, fontFamily: FONTS.DMSansBold }}>{data.productName} {customOrderSize ? `[${customOrderSize}]` : null}</Text>
           <Text style={{ fontSize: 10, fontFamily: FONTS.DMSansRegular, marginTop: 5 }}>{data.description}</Text>
-          <Text style={{ fontSize: 14, fontFamily: FONTS.DMSansBold, marginTop: 20 }}>R{data.price}</Text>
+          <Text style={{ fontSize: 14, fontFamily: FONTS.DMSansBold, marginTop: 20 }}>P{data.price}</Text>
         </View>
       </View>
+      {customDeleteButton}
     </TouchableOpacity>
   )
 }
 
+
+
 export default CategoryList
 
 const styles = StyleSheet.create({
+
   cardContainer: {
     backgroundColor: COLORS.white,
     marginHorizontal: 15,
@@ -40,7 +44,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    overflow: 'hidden',
     paddingLeft: 20,
     paddingVertical: 5,
     paddingRight: 145

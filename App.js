@@ -16,7 +16,7 @@ const App = () => {
   }); if (!loaded) return null;
 
   return (
-    <NavigationContainer initialRouteName="SplashScreen">
+    <NavigationContainer>
       <AuthStack />
     </NavigationContainer>
   );

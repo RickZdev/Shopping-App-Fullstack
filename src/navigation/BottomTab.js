@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, StyleSheet, StatusBar, Text } from 'react-native';
 import { Octicons, Feather, AntDesign, Ionicons } from '@expo/vector-icons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeStack } from './AppStack';
+import { getNumberOfCart } from '../database/firebase-config';
 import SearchTab from '../screens/SearchTab'
 import SettingsTab from '../screens/SettingsTab'
 import CartTab from '../screens/CartTab'
@@ -11,6 +12,12 @@ import COLORS from '../global/COLORS';
 const Tab = createBottomTabNavigator();
 
 const BottomTab = () => {
+  const [numberOfCart, setNumberOfCart] = useState(0);
+
+  useEffect(() => {
+    getNumberOfCart(setNumberOfCart);
+  }, [])
+
   return (
     <View style={styles.container}>
       <StatusBar />
@@ -45,10 +52,14 @@ const BottomTab = () => {
             tabBarIcon: ({ focused }) => (
               <View>
                 <AntDesign name='shoppingcart' size={24} color={focused ? COLORS.black : 'gray'} />
-                <View style={{ position: 'absolute', right: -3, top: -3, backgroundColor: focused ? COLORS.black : 'gray', borderRadius: 10 }}>
-                  <Text style={{ color: 'white', fontSize: 9, paddingHorizontal: 2, paddingVertical: 1 }}> 5 </Text>
-                </View>
+                {
+                  numberOfCart !== 0 ?
+                    <View style={{ position: 'absolute', right: -3, top: -3, backgroundColor: focused ? 'red' : 'gray', borderRadius: 10 }}>
+                      <Text style={{ color: 'white', fontSize: 9, paddingHorizontal: 2, paddingVertical: 1 }}> {numberOfCart} </Text>
+                    </View> : null
+                }
               </View>
+
             )
           }}
         />

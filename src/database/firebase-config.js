@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { addDoc, collection, doc, getFirestore, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where, getDoc } from 'firebase/firestore'
+import { addDoc, collection, doc, getFirestore, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where, getDoc, arrayRemove, arrayUnion } from 'firebase/firestore'
 import { getAuth, updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { ref, uploadBytes, getDownloadURL, getStorage } from 'firebase/storage'
 
@@ -18,6 +18,7 @@ const db = getFirestore(app)
 const auth = getAuth(app);
 const storage = getStorage(app)
 
+// authentication
 const addAuthenticatedUser = async (values, navigation) => {
   try {
     const { fullName, email, phoneNumber, password } = values;
@@ -69,6 +70,7 @@ const logoutUser = async (navigation) => {
   }
 }
 
+// get database
 const getPopular = (setPopularDb, popular, isMounted) => {
   const ref = query(doc(db, 'popular', popular))
   onSnapshot(ref, (field) => {
@@ -100,24 +102,30 @@ const getCart = (setCartDb, setTotal) => {
     let tempTotalPrice = 0
     snapshot.data().cart.map((product) => {
       tempCartDb.push(product)
-      tempTotalPrice += parseInt(product.price);
+      tempTotalPrice += parseInt(product.totalPrice);
     })
-
     setTotal(tempTotalPrice)
     setCartDb(tempCartDb)
   })
 }
 
-const addToCart = (product) => {
+const getNumberOfCart = (setNumberOfCart) => {
   const q = query(doc(db, 'users', auth.currentUser.uid));
-  getDoc(q)
-    .then(async (field) => {
-      const generatedId = Math.floor(Math.random() * 10000) + 1;
-      product.cartId = product.id + generatedId.toString();
-      await updateDoc(q, {
-        cart: [...field.data()?.cart, product]
-      })
-    })
+  onSnapshot(q, snapshot => {
+    let cartLength = snapshot.data()?.cart.length;
+    setNumberOfCart(cartLength);
+  })
+}
+
+// add to database
+const addToCart = async (product, quantity, size) => {
+  const q = query(doc(db, 'users', auth.currentUser.uid));
+  const generatedId = Math.floor(Math.random() * 10000) + 1;
+  const cartId = product.id + generatedId.toString();
+  const totalPrice = quantity * product.price;
+  await updateDoc(q, {
+    cart: arrayUnion({ ...product, cartId, orderQuantity: quantity, orderSize: size, totalPrice, })
+  })
 }
 
 const addToCategory = (categories) => {
@@ -171,4 +179,17 @@ const addProducts = async (values, sizes, imageUri) => {
   addToPopular(popular)
 }
 
-export { auth, db, addAuthenticatedUser, loginUser, logoutUser, getPopular, getCategories, getCart, addProducts, addToCart }
+// delete to database
+const deleteToCart = async (itemToDelete) => {
+  const q = doc(db, 'users', auth.currentUser.uid)
+  await updateDoc(q, {
+    cart: arrayRemove(itemToDelete)
+  });
+}
+
+export {
+  auth, db, addAuthenticatedUser, loginUser, logoutUser,
+  getPopular, getCategories, getCart, getNumberOfCart,
+  addProducts, addToCart,
+  deleteToCart
+}

@@ -1,11 +1,12 @@
-import React from 'react'
-import { StyleSheet, Text, TouchableOpacity } from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { logoutUser } from '../database/firebase-config'
+import { deleteToCart } from '../database/firebase-config'
 import { Feather } from '@expo/vector-icons'
 import COLORS from '../global/COLORS'
 import FONTS from '../global/FONTS'
 import SHADOWS from '../global/SHADOWS'
+import { set } from 'react-native-reanimated'
 
 
 const CustomMainButton = ({ text, handlePress, customStyle }) => {
@@ -47,19 +48,41 @@ const CustomMenuDrawerButton = () => {
   )
 }
 
-const CustomSizesButton = ({ data }) => {
+const CustomSizesButton = ({ data, setOrderSize }) => {
+  const [selectedSize, setSelectedSize] = useState(null);
+  const togglePress = (item, index) => {
+    setSelectedSize(index)
+    setOrderSize(item.charAt(0).toUpperCase())
+  }
+
   return (
     <>
       {data.sizes.map((item, index) => (
-        <TouchableOpacity key={index} style={styles.sizesContainer}>
-          <Text style={styles.sizesText}>{item.charAt(0).toUpperCase()}</Text>
+        <TouchableOpacity onPress={() => togglePress(item, index)}>
+          {
+            index === selectedSize ?
+              <View key={index} style={[styles.sizesContainer, { backgroundColor: 'black' }]}>
+                <Text style={styles.sizesText}>{item.charAt(0).toUpperCase()}</Text>
+              </View> :
+              <View key={index} style={styles.sizesContainer}>
+                <Text style={styles.sizesText}>{item.charAt(0).toUpperCase()}</Text>
+              </View>
+          }
         </TouchableOpacity>
       ))}
     </>
   )
 }
 
-export { CustomMainButton, CustomTextButton, CustomBackButton, CustomMenuDrawerButton, CustomSizesButton }
+const CustomDeleteButton = ({ itemToDelete }) => {
+  return (
+    <TouchableOpacity style={styles.deleteButton} onPress={() => { deleteToCart(itemToDelete) }}>
+      <View style={styles.deleteIcon} />
+    </TouchableOpacity>
+  )
+}
+
+export { CustomMainButton, CustomTextButton, CustomBackButton, CustomMenuDrawerButton, CustomSizesButton, CustomDeleteButton }
 
 const styles = StyleSheet.create({
   buttonContainer: {
@@ -117,5 +140,20 @@ const styles = StyleSheet.create({
   sizesText: {
     color: COLORS.white,
     fontFamily: FONTS.DMSansBold
-  }
+  },
+  deleteButton: {
+    position: 'absolute',
+    top: -10, right: -7,
+    width: 21,
+    height: 21,
+    borderRadius: 20,
+    backgroundColor: '#ee5555',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  deleteIcon: {
+    backgroundColor: COLORS.white,
+    height: 4,
+    width: 10,
+  },
 })

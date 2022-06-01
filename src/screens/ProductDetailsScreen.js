@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native'
 import { CustomBackButton, CustomSizesButton } from '../components/CustomButton'
 import { AntDesign } from '@expo/vector-icons'
 import CustomBottomSheet from '../components/CustomBottomSheet'
@@ -11,11 +11,12 @@ const ProductDetailsScreen = ({ route }) => {
   const product = route.params;
   const bottomSheetRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [orderQuantity, setOrderQuantity] = useState(1);
+  const [orderSize, setOrderSize] = useState(null)
 
   const handleOpenBottomSheet = useCallback((index) => {
     bottomSheetRef.current?.snapToIndex(index);
     setIsOpen(true);
-    addToCart(product)
   }, [])
 
   return (
@@ -29,15 +30,16 @@ const ProductDetailsScreen = ({ route }) => {
             <Image
               source={{ uri: product.imageURL }}
               style={[styles.image,]}
+              resizeMode='contain'
             />
           </View>
           <View style={styles.middlePart}>
             <Text style={{ fontSize: 18, fontFamily: FONTS.DMSansBold, marginBottom: 24 }}>{product.productName}</Text>
             <Text style={{ fontSize: 12, fontFamily: FONTS.DMSansRegular, color: COLORS.gray, marginBottom: 24 }}>{product.description}</Text>
-            <Text style={{ fontSize: 18, fontFamily: FONTS.DMSansBold }}>R {product.price}</Text>
+            <Text style={{ fontSize: 18, fontFamily: FONTS.DMSansBold }}>P{product.price}</Text>
           </View>
           <View style={styles.bottom}>
-            <CustomSizesButton data={product} />
+            <CustomSizesButton data={product} setOrderSize={setOrderSize} />
             <TouchableOpacity style={styles.bottomRight} onPress={() => handleOpenBottomSheet(0)}>
               <AntDesign name='shoppingcart' size={30} color={COLORS.white} />
             </TouchableOpacity>
@@ -46,7 +48,8 @@ const ProductDetailsScreen = ({ route }) => {
       </View>
       {
         // bottom sheet
-        isOpen ? <CustomBottomSheet bottomSheetRef={bottomSheetRef} isOpenBottomSheet={setIsOpen} /> : null
+        isOpen ? <CustomBottomSheet bottomSheetRef={bottomSheetRef} isOpenBottomSheet={setIsOpen}
+          setQuantity={setOrderQuantity} quantity={orderQuantity} product={product} size={orderSize} /> : null
       }
     </View>
   )
