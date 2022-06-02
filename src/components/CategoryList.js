@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native'
 import COLORS from '../global/COLORS'
 import FONTS from '../global/FONTS'
 
-const CategoryList = ({ data, customDeleteButton, customOrderSize, disableNavigation }) => {
+const CategoryList = ({ data, customDeleteButton, disableNavigation }) => {
   const navigation = useNavigation();
   return (
     <TouchableOpacity style={styles.cardContainer} activeOpacity={1} onPress={!disableNavigation ? () => navigation.navigate('ProductDetailsScreen', data) : null}>
@@ -17,7 +17,7 @@ const CategoryList = ({ data, customDeleteButton, customOrderSize, disableNaviga
           />
         </View>
         <View style={styles.rightCard}>
-          <Text style={{ fontSize: 14, fontFamily: FONTS.DMSansBold }}>{data.productName} {customOrderSize ? `[${customOrderSize}]` : null}</Text>
+          <Text style={{ fontSize: 14, fontFamily: FONTS.DMSansBold }}>{data.productName} {data.orderSize ? `[${data.orderSize}]` : null}</Text>
           <Text style={{ fontSize: 10, fontFamily: FONTS.DMSansRegular, marginTop: 5 }}>{data.description}</Text>
           <Text style={{ fontSize: 14, fontFamily: FONTS.DMSansBold, marginTop: 20 }}>P{data.price}</Text>
         </View>
@@ -27,12 +27,9 @@ const CategoryList = ({ data, customDeleteButton, customOrderSize, disableNaviga
   )
 }
 
-
-
 export default CategoryList
 
 const styles = StyleSheet.create({
-
   cardContainer: {
     backgroundColor: COLORS.white,
     marginHorizontal: 15,

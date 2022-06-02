@@ -1,4 +1,4 @@
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, StyleSheet, Text, TouchableOpacity, View, ToastAndroid } from 'react-native'
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
 import COLORS from '../global/COLORS';
@@ -28,7 +28,7 @@ const CustomBottomSheet = ({ bottomSheetRef, isOpenBottomSheet, setQuantity, qua
     } else if (quantity > 0) {
       addToCart(product, quantity, size)
       isOpenBottomSheet(false)
-      navigation.jumpTo('CartTab');
+      ToastAndroid.show(`${product.productName} added to cart successfully!`, ToastAndroid.SHORT);
     } else {
       Alert.alert('', 'You should add a quantity! Please try again.', [{ text: "Got it", onPress: () => { } }]);
     }

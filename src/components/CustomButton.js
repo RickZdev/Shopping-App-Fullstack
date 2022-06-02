@@ -58,16 +58,10 @@ const CustomSizesButton = ({ data, setOrderSize }) => {
   return (
     <>
       {data.sizes.map((item, index) => (
-        <TouchableOpacity onPress={() => togglePress(item, index)}>
-          {
-            index === selectedSize ?
-              <View key={index} style={[styles.sizesContainer, { backgroundColor: 'black' }]}>
-                <Text style={styles.sizesText}>{item.charAt(0).toUpperCase()}</Text>
-              </View> :
-              <View key={index} style={styles.sizesContainer}>
-                <Text style={styles.sizesText}>{item.charAt(0).toUpperCase()}</Text>
-              </View>
-          }
+        <TouchableOpacity key={index} onPress={() => togglePress(item, index)}>
+          <View style={[styles.sizesContainer, { backgroundColor: index === selectedSize ? COLORS.black : COLORS.gray }]}>
+            <Text style={styles.sizesText}>{item.charAt(0).toUpperCase()}</Text>
+          </View>
         </TouchableOpacity>
       ))}
     </>

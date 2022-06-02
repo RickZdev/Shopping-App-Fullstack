@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { addDoc, collection, doc, getFirestore, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where, getDoc, arrayRemove, arrayUnion } from 'firebase/firestore'
 import { getAuth, updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { ref, uploadBytes, getDownloadURL, getStorage } from 'firebase/storage'
+import { ToastAndroid } from "react-native";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCRrjMVXW0zRWWBxIM9NFrr-CjT5_Vgpcs",
@@ -73,7 +74,7 @@ const logoutUser = async (navigation) => {
 // get database
 const getPopular = (setPopularDb, popular, isMounted) => {
   const ref = query(doc(db, 'popular', popular))
-  onSnapshot(ref, (field) => {
+  const unsubscribe = onSnapshot(ref, (field) => {
     let tempDb = []
     field.data().products.forEach((item) => {
       tempDb.push(item);
@@ -82,22 +83,26 @@ const getPopular = (setPopularDb, popular, isMounted) => {
       setPopularDb(tempDb)
     }
   })
+
+  return unsubscribe;
 }
 
 const getCategories = (setCategories) => {
   const ref = query(collection(db, 'categories'))
-  onSnapshot(ref, (snapshot) => {
+  const unsubscribe = onSnapshot(ref, (snapshot) => {
     let tempDb = []
     snapshot.docs.forEach((doc) => {
       tempDb.push(doc.data())
     })
     setCategories(tempDb)
   })
+
+  return unsubscribe;
 }
 
 const getCart = (setCartDb, setTotal) => {
   const q = query(doc(db, 'users', auth.currentUser.uid));
-  onSnapshot(q, snapshot => {
+  const unsubscribe = onSnapshot(q, snapshot => {
     let tempCartDb = []
     let tempTotalPrice = 0
     snapshot.data().cart.map((product) => {
@@ -106,15 +111,18 @@ const getCart = (setCartDb, setTotal) => {
     })
     setTotal(tempTotalPrice)
     setCartDb(tempCartDb)
+
   })
+  return unsubscribe;
 }
 
 const getNumberOfCart = (setNumberOfCart) => {
   const q = query(doc(db, 'users', auth.currentUser.uid));
-  onSnapshot(q, snapshot => {
+  const unsubscribe = onSnapshot(q, snapshot => {
     let cartLength = snapshot.data()?.cart.length;
     setNumberOfCart(cartLength);
   })
+  return unsubscribe;
 }
 
 // add to database
@@ -130,7 +138,7 @@ const addToCart = async (product, quantity, size) => {
 
 const addToCategory = (categories) => {
   const q = query(collection(db, 'products'), where('categories', '==', categories))
-  onSnapshot(q, async (snapshot) => {
+  const unsubscribe = onSnapshot(q, async (snapshot) => {
     let categoryDb = []
     snapshot.docs.forEach((doc) => {
       categoryDb.push({ ...doc.data(), id: doc.id });
@@ -140,11 +148,13 @@ const addToCategory = (categories) => {
       products: [...categoryDb]
     })
   })
+
+  return unsubscribe;
 }
 
 const addToPopular = (popular) => {
   const q = query(collection(db, 'products'), where('popular', '==', popular))
-  onSnapshot(q, async (snapshot) => {
+  const unsubscribe = onSnapshot(q, async (snapshot) => {
     let popularDb = []
     snapshot.docs.forEach((doc) => {
       popularDb.push({ ...doc.data(), id: doc.id });
@@ -154,6 +164,8 @@ const addToPopular = (popular) => {
       products: [...popularDb]
     })
   })
+
+  return unsubscribe;
 }
 
 const addProducts = async (values, sizes, imageUri) => {
@@ -185,6 +197,11 @@ const deleteToCart = async (itemToDelete) => {
   await updateDoc(q, {
     cart: arrayRemove(itemToDelete)
   });
+  ToastAndroid.showWithGravityAndOffset(
+    `${itemToDelete.productName} deleted successfully!`,
+    ToastAndroid.SHORT,
+    ToastAndroid.BOTTOM,
+    0, 300)
 }
 
 export {

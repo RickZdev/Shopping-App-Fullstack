@@ -1,4 +1,4 @@
-import { FlatList, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { FlatList, ScrollView, StyleSheet, Text, View, VirtualizedList } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import COLORS from '../global/COLORS'
 import { getCart } from '../database/firebase-config';
@@ -19,28 +19,25 @@ const CartTab = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}> Your cart </Text>
-        {cartDb[0] ? null : <View style={styles.horizontalLine} />}
+        {cartDb.length > 0 ? null : <View style={styles.horizontalLine} />}
       </View>
-      {
-        cartDb[0] ?
-          <FlatList
-            data={cartDb}
-            keyExtractor={(item => item.cartId)}
-            renderItem={({ item }) => (
-              <View style={styles.categoryListContainer}>
-                <CategoryList
-                  data={item}
-                  customDeleteButton={<CustomDeleteButton itemToDelete={item} />}
-                  customOrderSize={item.orderSize}
-                  disableNavigation={true}
-                />
-              </View>
-            )}
-          />
-          :
-          <Text style={styles.noCartText}> There is nothing in your cart. </Text>
-      }
-      {cartDb[0] ?
+      <VirtualizedList
+        data={cartDb}
+        keyExtractor={(item => item.cartId)}
+        renderItem={({ item }) => (
+          <View style={styles.categoryListContainer}>
+            <CategoryList
+              data={item}
+              customDeleteButton={<CustomDeleteButton itemToDelete={item} />}
+              disableNavigation={true}
+            />
+          </View>
+        )}
+        getItemCount={cartDb => cartDb.length}
+        getItem={(cartDb, index) => cartDb[index]}
+        ListEmptyComponent={() => <Text style={styles.noCartText}> There is nothing in your cart. </Text>}
+      />
+      {cartDb.length > 0 ?
         <View style={styles.bottomContainer}>
           <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
             {cartDb.map((item, key) => (
