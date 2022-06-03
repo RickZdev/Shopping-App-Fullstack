@@ -27,6 +27,7 @@ const addAuthenticatedUser = async (values, navigation) => {
     navigation.goBack();
     await updateProfile(auth.currentUser, {
       displayName: fullName,
+      photoURL: 'https://firebasestorage.googleapis.com/v0/b/shopping-app-be469.appspot.com/o/images%2Favatar%2Favatar.jpg?alt=media&token=32022140-2a82-4c45-8a4b-9fe6f500eba4'
     })
     await addUserToDatabase(user, { phoneNumber })
   } catch (error) {
@@ -50,6 +51,16 @@ const addUserToDatabase = async (user, additionalData) => {
     })
   } catch (error) {
     console.log(error.message, "error creating user!")
+  }
+}
+
+const addAuthProfile = async (imageUri) => {
+  try {
+    await updateProfile(auth.currentUser, {
+      photoURL: imageUri,
+    })
+  } catch (error) {
+    console.log(error.message)
   }
 }
 
@@ -205,7 +216,7 @@ const deleteToCart = async (itemToDelete) => {
 }
 
 export {
-  auth, db, addAuthenticatedUser, loginUser, logoutUser,
+  auth, db, storage, addAuthenticatedUser, addAuthProfile, loginUser, logoutUser,
   getPopular, getCategories, getCart, getNumberOfCart,
   addProducts, addToCart,
   deleteToCart

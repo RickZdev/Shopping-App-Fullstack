@@ -1,16 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { StyleSheet, View, StatusBar, SafeAreaView, ScrollView, Image } from 'react-native'
 import { CustomMenuDrawerButton } from '../components/CustomButton'
-import { getPopular, logoutUser } from '../database/firebase-config'
+import { auth, getPopular } from '../database/firebase-config'
 import CategoryCard from '../components/CategoryCard'
 import HorizontalCard from '../components/HorizontalCard'
 import Banner from '../components/Banner'
 import COLORS from '../global/COLORS'
-import { useNavigation } from '@react-navigation/native'
-import { TouchableOpacity } from 'react-native-gesture-handler'
 
 const HomeTab = () => {
-  const navigation = useNavigation()
   const [newArrival, setNewArrival] = useState([])
   const [bestSellers, setBestSellers] = useState([])
   const isMounted = useRef(true)
@@ -21,28 +18,23 @@ const HomeTab = () => {
     }
   }, [])
 
-
   useEffect(() => {
     getPopular(setNewArrival, 'New arrivals', isMounted)
     getPopular(setBestSellers, 'Best sellers', isMounted)
   }, [])
 
-  const handleLogoutUser = () => {
-    logoutUser(navigation)
-  }
-
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <StatusBar />
       <SafeAreaView style={styles.containerWrapper}>
-        <TouchableOpacity style={styles.headerWrapper} onPress={() => handleLogoutUser()}>
+        <View style={styles.headerWrapper}>
           <Image
             source={require('../../assets/images/officialLogo.png')}
             resizeMode='contain'
             style={styles.logo}
           />
           <CustomMenuDrawerButton />
-        </TouchableOpacity>
+        </View>
         <HorizontalCard headerTitle={'New arrivals'} data={newArrival} customStyle={{ marginTop: 10 }} />
         <Banner headerTitle={'Vans Venice collection'} customStyle={{ marginTop: 30 }} />
         <CategoryCard headerTitle={"Shop by Category"} />

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { deleteToCart } from '../database/firebase-config'
+import { auth, deleteToCart } from '../database/firebase-config'
 import { Feather } from '@expo/vector-icons'
 import COLORS from '../global/COLORS'
 import FONTS from '../global/FONTS'
@@ -43,12 +43,7 @@ const CustomMenuDrawerButton = () => {
 
   return (
     <TouchableOpacity style={styles.menuWrapper} onPress={() => navigation.openDrawer()}>
-      {/* <Feather name='menu' size={25} style={styles.menu} /> */}
-      <Image
-        source={require('../../assets/images/avatar.jpg')}
-        resizeMode='contain'
-        style={styles.menu}
-      />
+      <Feather name='menu' size={24} style={styles.menu} />
     </TouchableOpacity>
   )
 }
@@ -127,9 +122,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     elevation: 7,
     overflow: 'hidden'
-  },
-  menu: {
-    width: '50%',
   },
   sizesContainer: {
     justifyContent: 'center',
