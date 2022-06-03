@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react
 import { useNavigation } from '@react-navigation/native';
 import COLORS from '../global/COLORS';
 import FONTS from '../global/FONTS'
+import { Feather } from '@expo/vector-icons'
 
 const HorizontalCard = ({ headerTitle, data, customStyle }) => {
   const navigation = useNavigation();
@@ -10,9 +11,11 @@ const HorizontalCard = ({ headerTitle, data, customStyle }) => {
     <View style={[styles.container, customStyle]}>
       <Text style={styles.title}>{headerTitle}</Text>
       <FlatList
+
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         data={data}
+        initialNumToRender={5}
         keyExtractor={(item => item.id)}
         renderItem={({ item, index }) => (
           <View style={[styles.cardContainer, { marginLeft: index === 0 ? 12 : 0 }]}>
@@ -23,6 +26,14 @@ const HorizontalCard = ({ headerTitle, data, customStyle }) => {
                 resizeMode='contain'
               />
             </TouchableOpacity>
+          </View>
+        )}
+        ListFooterComponent={() => (
+          <View style={styles.footerContainer}>
+            <TouchableOpacity style={styles.footerButton}>
+              <Feather name='chevron-right' size={25} style={styles.back} color='black' />
+            </TouchableOpacity>
+            <Text style={styles.footerText}> View More </Text>
           </View>
         )}
       />
@@ -42,8 +53,8 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     backgroundColor: COLORS.white,
-    width: 200,
-    height: 200,
+    width: 150,
+    height: 150,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -54,7 +65,26 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   image: {
-    width: 180,
-    height: 200,
-  }
+    width: 130,
+    height: 150,
+  },
+  footerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+  },
+  footerButton: {
+    backgroundColor: COLORS.white,
+    width: 35,
+    height: 35,
+    borderRadius: 20,
+    elevation: 7,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  footerText: {
+    marginTop: 15,
+    fontFamily: FONTS.DMSansBold,
+  },
 })

@@ -22,14 +22,14 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     marginLeft: 37,
-    marginRight: 25
+    marginRight: 25,
   },
   title: {
     fontSize: 18,
     fontFamily: FONTS.DMSansBold,
+    marginBottom: -10,
   },
   image: {
     width: '100%',
-    marginTop: 15,
   }
 })

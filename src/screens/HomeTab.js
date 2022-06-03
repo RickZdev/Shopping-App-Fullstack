@@ -35,7 +35,6 @@ const HomeTab = () => {
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <StatusBar />
       <SafeAreaView style={styles.containerWrapper}>
-
         <TouchableOpacity style={styles.headerWrapper} onPress={() => handleLogoutUser()}>
           <Image
             source={require('../../assets/images/officialLogo.png')}
@@ -67,7 +66,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingRight: 32,
     paddingLeft: 20,
-    marginTop: 23,
-    marginBottom: 20
+    paddingVertical: 4,
+    marginTop: 19,
+    marginBottom: 16,
   },
 })
