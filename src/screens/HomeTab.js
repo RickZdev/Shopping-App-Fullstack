@@ -6,11 +6,14 @@ import CategoryCard from '../components/CategoryCard'
 import HorizontalCard from '../components/HorizontalCard'
 import Banner from '../components/Banner'
 import COLORS from '../global/COLORS'
+import { useScrollToTop } from '@react-navigation/native'
 
 const HomeTab = () => {
   const [newArrival, setNewArrival] = useState([])
   const [bestSellers, setBestSellers] = useState([])
   const isMounted = useRef(true)
+  const ref = useRef(null);
+  useScrollToTop(ref);
 
   useEffect(() => {
     return () => {
@@ -24,7 +27,7 @@ const HomeTab = () => {
   }, [])
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <ScrollView ref={ref} style={styles.container} showsVerticalScrollIndicator={false}>
       <StatusBar />
       <SafeAreaView style={styles.containerWrapper}>
         <View style={styles.headerWrapper}>
@@ -36,10 +39,10 @@ const HomeTab = () => {
           <CustomMenuDrawerButton />
         </View>
         <HorizontalCard headerTitle={'New arrivals'} data={newArrival} customStyle={{ marginTop: 10 }} />
-        <Banner headerTitle={'Vans Venice collection'} customStyle={{ marginTop: 30 }} />
+        <Banner headerTitle={'Vans Venice collection'} />
         <CategoryCard headerTitle={"Shop by Category"} />
         <HorizontalCard headerTitle={'Best sellers'} data={bestSellers} />
-        <Banner headerTitle={'Vans Wayvee drop'} customStyle={{ marginTop: 15 }} />
+        <Banner headerTitle={'Vans Wayvee drop'} />
       </SafeAreaView>
     </ScrollView>
   )

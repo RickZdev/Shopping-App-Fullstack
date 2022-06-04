@@ -37,7 +37,7 @@ const BottomTab = () => {
           options={{
             tabBarIcon: ({ focused }) => (
               <Octicons name='home' size={22} color={focused ? COLORS.black : 'gray'} />
-            )
+            ),
           }}
         />
         <Tab.Screen name="SearchTab" component={SearchTab}

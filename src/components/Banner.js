@@ -1,17 +1,14 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, ImageBackground, } from 'react-native'
 import FONTS from '../global/FONTS'
 
-const Banner = ({ headerTitle, customStyle }) => {
+const Banner = ({ headerTitle }) => {
   return (
-    <View style={[styles.container, customStyle]}>
+    <View style={[styles.container]}>
       <Text style={styles.title}>{headerTitle}</Text>
-      <TouchableOpacity style={styles.imageWrapper}>
-        <Image
-          source={require('../../assets/images/banner1.png')}
-          resizeMode='contain'
-          style={styles.image}
-        />
-      </TouchableOpacity>
+      <ImageBackground
+        source={require('../../assets/images/banner1.png')}
+        style={styles.image}
+        resizeMode='contain' />
     </View>
   )
 }
@@ -20,16 +17,22 @@ export default Banner
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     justifyContent: 'center',
-    marginLeft: 37,
+    marginLeft: 20,
     marginRight: 25,
+    marginVertical: 30,
+    width: '90%',
+    height: 230,
   },
   title: {
     fontSize: 18,
     fontFamily: FONTS.DMSansBold,
-    marginBottom: -10,
+    paddingLeft: 16,
+    paddingBottom: 10,
   },
   image: {
     width: '100%',
+    height: '100%'
   }
 })

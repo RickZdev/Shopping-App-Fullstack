@@ -1,13 +1,13 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
+import { DrawerContentScrollView, DrawerItem, DrawerItemList, useDrawerProgress } from '@react-navigation/drawer'
 import COLORS from '../global/COLORS'
 import { auth, logoutUser } from '../database/firebase-config'
 import FONTS from '../global/FONTS'
 import * as ImagePicker from 'expo-image-picker'
 import { addAuthProfile } from '../database/firebase-config'
 import { useNavigation } from '@react-navigation/native'
-import { SimpleLineIcons } from '@expo/vector-icons';
+import { SimpleLineIcons, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 const CustomDrawer = (props) => {
@@ -34,6 +34,9 @@ const CustomDrawer = (props) => {
     <View style={styles.drawerContainer}>
       <DrawerContentScrollView {...props}>
         <View style={styles.header}>
+          <TouchableOpacity style={styles.closeButton} onPress={() => props.navigation.closeDrawer()}>
+            <Ionicons name="md-close-outline" size={40} color="black" />
+          </TouchableOpacity>
           <TouchableOpacity style={styles.avatarContainer} onPress={handlePressSelectPhoto}>
             <View style={styles.photoContainer}>
               <Image
@@ -51,7 +54,7 @@ const CustomDrawer = (props) => {
         <DrawerItemList {...props} />
       </DrawerContentScrollView>
       <TouchableOpacity style={styles.footerContainer} onPress={() => handleLogoutUser()}>
-        <SimpleLineIcons name="logout" size={24} color="black" style={styles.logoutIcon} />
+        <SimpleLineIcons name="logout" size={18} color="black" style={styles.logoutIcon} />
         <Text style={styles.logoutText}> Sign Out </Text>
       </TouchableOpacity>
     </View>
@@ -70,6 +73,10 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     paddingBottom: 25,
   },
+  closeButton: {
+    position: 'absolute',
+    top: 5, right: 10,
+  },
   avatarContainer: {
     backgroundColor: COLORS.white,
     width: 80,
@@ -78,16 +85,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 7,
-    overflow: 'hidden'
   },
   avatar: {
     width: 80,
     height: 80,
-    borderRadius: 20,
-  },
-  defaultAvatar: {
-    width: '50%',
-    height: '50%'
+    borderRadius: 40,
   },
   userDetailsContainer: {
     marginTop: 20,
@@ -104,13 +106,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: 15,
     paddingLeft: 15,
     borderTopWidth: 1,
     borderTopColor: COLORS.gray
   },
   logoutText: {
     fontFamily: FONTS.DMSansBold,
+    fontSize: 12,
     letterSpacing: 1,
     paddingLeft: 10,
   },

@@ -6,8 +6,11 @@ import { AntDesign } from '@expo/vector-icons'
 import COLORS from '../global/COLORS'
 import FONTS from '../global/FONTS'
 import { CustomMainButton } from './CustomButton'
+import LottieView from 'lottie-react-native'
+import { useNavigation } from '@react-navigation/native'
 
 const CartBottomSheet = ({ cartDb, total }) => {
+  const navigation = useNavigation();
   const [isOpen, setIsOpen] = useState(false);
   const snapPoints = useMemo(() => ['45%'], []);
   const bottomSheetRef = useRef(null);
@@ -20,7 +23,12 @@ const CartBottomSheet = ({ cartDb, total }) => {
   return (
     <>
       <TouchableOpacity style={styles.cartButtonContainer} onPress={() => handleOpenBottomSheet(0)}>
-        <AntDesign name='shoppingcart' size={24} color={COLORS.black} />
+        <LottieView
+          source={require('../../assets/animation/cartIcon.json')}
+          style={styles.cartAnimation}
+          autoPlay={true}
+          loop={true}
+        />
       </TouchableOpacity>
       {isOpen && cartDb.length > 0 ?
         <BottomSheet
@@ -44,7 +52,7 @@ const CartBottomSheet = ({ cartDb, total }) => {
                 <Text style={styles.totalText}> Total: </Text>
                 <Text style={styles.totalText}> {total}</Text>
               </View>
-              <CustomMainButton text={"Checkout"} />
+              <CustomMainButton text={"Checkout"} handlePress={() => navigation.navigate('PaymentSuccessScreen')} />
             </ScrollView>
           </BottomSheetView>
         </BottomSheet>
@@ -100,4 +108,8 @@ const styles = StyleSheet.create({
     borderWidth: 0.8,
     borderColor: COLORS.gray
   },
+  cartAnimation: {
+    width: 30,
+    height: 30,
+  }
 })

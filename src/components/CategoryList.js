@@ -12,7 +12,7 @@ const CategoryList = ({ data, customDeleteButton, disableNavigation }) => {
         <View style={styles.leftCard}>
           <Image
             source={{ uri: data.imageURL }}
-            resizeMode='cover'
+            resizeMode='contain'
             style={styles.image}
           />
         </View>
