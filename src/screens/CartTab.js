@@ -20,6 +20,7 @@ const CartTab = () => {
     getCart(setCartDb, setTotal);
     setLoad(true);
   }, [])
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>

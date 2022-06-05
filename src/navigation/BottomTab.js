@@ -2,11 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { View, StyleSheet, StatusBar, Text } from 'react-native';
 import { Octicons, Feather, AntDesign, Ionicons } from '@expo/vector-icons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { HomeStack } from './AppStack';
+import { HomeStack, CartStack } from './AppStack';
 import { getNumberOfCart } from '../database/firebase-config';
 import SearchTab from '../screens/SearchTab'
 import SettingsTab from '../screens/SettingsTab'
-import CartTab from '../screens/CartTab'
 import COLORS from '../global/COLORS';
 
 const Tab = createBottomTabNavigator();
@@ -47,7 +46,7 @@ const BottomTab = () => {
             )
           }}
         />
-        <Tab.Screen name="CartTab" component={CartTab}
+        <Tab.Screen name="CartStack" component={CartStack}
           options={{
             tabBarIcon: ({ focused }) => (
               <View>

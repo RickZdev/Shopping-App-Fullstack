@@ -4,6 +4,7 @@ import ProductDetailsScreen from '../screens/ProductDetailsScreen';
 import CategoryScreen from '../screens/CategoryScreen'
 import PaymentSuccessScreen from '../screens/PaymentSuccessScreen'
 import HomeTab from '../screens/HomeTab'
+import CartTab from '../screens/CartTab';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,4 +18,12 @@ const HomeStack = () => {
     </Stack.Navigator>
   )
 }
-export { HomeStack }
+
+const CartStack = () => {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="CartTab" component={CartTab} />
+    </Stack.Navigator>
+  )
+}
+export { HomeStack, CartStack }
