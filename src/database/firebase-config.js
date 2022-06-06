@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { addDoc, collection, doc, getFirestore, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where, getDoc, arrayRemove, arrayUnion } from 'firebase/firestore'
+import { addDoc, collection, doc, getFirestore, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where, getDoc, arrayRemove, arrayUnion, getDocs } from 'firebase/firestore'
 import { getAuth, updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { ref, uploadBytes, getDownloadURL, getStorage } from 'firebase/storage'
 import { ToastAndroid } from "react-native";
@@ -84,31 +84,46 @@ const logoutUser = async (navigation) => {
 
 // get database
 const getPopular = (setPopularDb, popular, isMounted) => {
-  const ref = query(doc(db, 'popular', popular))
-  const unsubscribe = onSnapshot(ref, (field) => {
-    let tempDb = []
-    field.data().products.forEach((item) => {
-      tempDb.push(item);
-    })
-    if (isMounted.current) {
+  if (isMounted) {
+    const ref = query(collection(db, 'products'), where('popular', '==', popular))
+    const ref2 = query(doc(db, 'popular', popular))
+    onSnapshot(ref, async (snapshot) => {
+      let tempDb = []
+      snapshot.docs.forEach((doc) => {
+        tempDb.push({ ...doc.data(), id: doc.id });
+      })
       setPopularDb(tempDb)
-    }
-  })
-
-  return unsubscribe;
+      await updateDoc(ref2, {
+        products: [...tempDb]
+      })
+    })
+  }
 }
 
-const getCategories = (setCategories) => {
-  const ref = query(collection(db, 'categories'))
-  const unsubscribe = onSnapshot(ref, (snapshot) => {
+const getCategories = (setCategories, categories, isMounted) => {
+  const ref3 = query(collection(db, 'categories'))
+  onSnapshot(ref3, snapshot => {
     let tempDb = []
     snapshot.docs.forEach((doc) => {
-      tempDb.push(doc.data())
+      tempDb.push({ ...doc.data(), id: doc.id })
     })
     setCategories(tempDb)
   })
 
-  return unsubscribe;
+  categories.map((item) => {
+    const ref1 = query(doc(db, 'categories', item.id))
+    const ref2 = query(collection(db, 'products'), where('categories', '==', item.id));
+    onSnapshot(ref2, async (snapshot2) => {
+      let tempDb = []
+      snapshot2.docs.forEach((doc) => {
+        tempDb.push({ ...doc.data(), id: doc.id })
+      })
+      await updateDoc(ref1, {
+        products: [...tempDb]
+      })
+    })
+  })
+
 }
 
 const getCart = (setCartDb, setTotal) => {
@@ -134,6 +149,29 @@ const getNumberOfCart = (setNumberOfCart) => {
     setNumberOfCart(cartLength);
   })
   return unsubscribe;
+}
+
+const getLikes = (setIsLike, product, isMounted) => {
+  if (isMounted) {
+    const q = query(doc(db, 'products', product.id))
+    const unsubscribe = onSnapshot(q, (docu) => {
+      if (docu.data().likes.includes(auth.currentUser.uid)) {
+        setIsLike(true)
+      }
+    });
+    return unsubscribe;
+  }
+}
+
+const getNumberOfLikes = (setNumberOfLikes, product, isMounted) => {
+  if (isMounted) {
+    const q = query(doc(db, 'products', product.id))
+    const unsubscribe = onSnapshot(q, (product) => {
+      setNumberOfLikes(product.data().likes.length)
+    });
+
+    return unsubscribe;
+  }
 }
 
 // add to database
@@ -195,11 +233,25 @@ const addProducts = async (values, sizes, imageUri) => {
 
   const productsCol = collection(db, 'products')
   await addDoc(productsCol, {
-    categories, popular, description, quantity, productName, price, sizes, imageURL, createdAt
+    categories, popular, description, quantity, productName, price, sizes, imageURL, createdAt, likes: []
   })
 
   addToCategory(categories)
   addToPopular(popular)
+}
+
+const addLike = async (isLike, setIsLike, product) => {
+  const q = query(doc(db, 'products', product.id))
+  if (isLike) {
+    setIsLike(!isLike);
+    await updateDoc(q, {
+      likes: arrayRemove(auth.currentUser.uid)
+    })
+  } else {
+    await updateDoc(q, {
+      likes: arrayUnion(auth.currentUser.uid)
+    })
+  }
 }
 
 // delete to database
@@ -217,7 +269,7 @@ const deleteToCart = async (itemToDelete) => {
 
 export {
   auth, db, storage, addAuthenticatedUser, addAuthProfile, loginUser, logoutUser,
-  getPopular, getCategories, getCart, getNumberOfCart,
-  addProducts, addToCart,
+  getPopular, getCategories, getCart, getNumberOfCart, getLikes, getNumberOfLikes,
+  addProducts, addToCart, addLike,
   deleteToCart
 }

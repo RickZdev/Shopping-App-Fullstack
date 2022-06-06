@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, VirtualizedList } from 'react-native'
+import { RefreshControl, StyleSheet, Text, View, VirtualizedList } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import COLORS from '../global/COLORS'
 import { getCart } from '../database/firebase-config';
@@ -6,13 +6,15 @@ import CategoryList from '../components/CategoryList';
 import FONTS from '../global/FONTS';
 import { CustomDeleteButton } from '../components/CustomButton';
 import CartBottomSheet from '../components/CartBottomSheet';
-import { useScrollToTop } from '@react-navigation/native';
+import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import LottieView from 'lottie-react-native'
 
 const CartTab = () => {
+  const navigation = useNavigation();
   const [cartDb, setCartDb] = useState([]);
-  const [total, setTotal] = useState(0)
-  const [isLoad, setLoad] = useState(false)
+  const [total, setTotal] = useState(0);
+  const [isLoad, setLoad] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const ref = useRef(null);
 
   useScrollToTop(ref);
@@ -21,6 +23,12 @@ const CartTab = () => {
     setLoad(true);
   }, [])
 
+  const onRefresh = () => {
+    setRefreshing(true)
+    navigation.navigate('CartTab');
+    setRefreshing(false)
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -28,6 +36,12 @@ const CartTab = () => {
         {cartDb.length > 0 ? null : <View style={styles.horizontalLine} />}
       </View>
       <VirtualizedList
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
         ref={ref}
         data={cartDb}
         keyExtractor={(item => item.cartId)}

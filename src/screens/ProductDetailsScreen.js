@@ -1,29 +1,51 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native'
-import { CustomBackButton, CustomSizesButton } from '../components/CustomButton'
+import { CustomBackButton, CustomLikeButton, CustomSizesButton } from '../components/CustomButton'
 import { AntDesign } from '@expo/vector-icons'
 import CustomBottomSheet from '../components/CustomBottomSheet'
 import COLORS from '../global/COLORS'
 import FONTS from '../global/FONTS'
-import { addToCart } from '../database/firebase-config';
+import { addLike, getLikes, getNumberOfLikes } from '../database/firebase-config';
 
 const ProductDetailsScreen = ({ route }) => {
   const product = route.params;
   const bottomSheetRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
   const [orderQuantity, setOrderQuantity] = useState(1);
-  const [orderSize, setOrderSize] = useState(null)
+  const [orderSize, setOrderSize] = useState(null);
+  const [isLike, setIsLike] = useState(false);
+  const [numberOfLikes, setNumberOfLikes] = useState(0);
+
+  useEffect(() => {
+    let isMounted = true;
+    getLikes(setIsLike, product, isMounted);
+    getNumberOfLikes(setNumberOfLikes, product, isMounted);
+
+    return () => {
+      isMounted = false;
+    }
+  }, [])
 
   const handleOpenBottomSheet = useCallback((index) => {
-    bottomSheetRef.current?.snapToIndex(index);
-    setIsOpen(true);
+    if (product.quantity <= 0) {
+      Alert.alert('OUT OF STOCK', 'THIS PRODUCT IS CURRENTLY OUT OF STOCK.', [{ text: "Okay", onPress: () => { } }]);
+    } else {
+      bottomSheetRef.current?.snapToIndex(index);
+      setIsOpen(true);
+    }
+
   }, [])
+
+  const handlePressLike = () => {
+    addLike(isLike, setIsLike, product);
+  }
 
   return (
     <View style={[styles.container,]}>
       <View style={styles.cardContainer}>
         <View style={styles.header}>
           <CustomBackButton />
+          <CustomLikeButton isLike={isLike} handlePressLike={handlePressLike} />
         </View>
         <View style={styles.cardContainerWrapper}>
           <View style={styles.imageWrapper}>
@@ -34,7 +56,16 @@ const ProductDetailsScreen = ({ route }) => {
             />
           </View>
           <View style={styles.middlePart}>
-            <Text style={{ fontSize: 18, fontFamily: FONTS.DMSansBold, marginBottom: 24 }}>{product.productName}</Text>
+            <View style={{ marginBottom: 24 }}>
+              <Text style={{ fontSize: 18, fontFamily: FONTS.DMSansBold, }}>{product.productName}</Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Text style={{ fontSize: 12, fontFamily: FONTS.DMSansBold, paddingTop: 5, color: COLORS.gray }}>Liked by: {numberOfLikes}</Text>
+                {product.quantity > 0 ?
+                  <Text style={{ fontSize: 12, fontFamily: FONTS.DMSansBold, paddingTop: 5, color: COLORS.gray }}>Quantity: {product.quantity}</Text> :
+                  <Text style={{ fontSize: 12, fontFamily: FONTS.DMSansBold, paddingTop: 5, color: COLORS.gray }}>Out of Stock</Text>
+                }
+              </View>
+            </View>
             <Text style={{ fontSize: 12, fontFamily: FONTS.DMSansRegular, color: COLORS.gray, marginBottom: 24 }}>{product.description}</Text>
             <Text style={{ fontSize: 18, fontFamily: FONTS.DMSansBold }}>P{product.price}</Text>
           </View>
@@ -71,8 +102,11 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 10,
   },
   header: {
-    paddingLeft: 25,
     paddingTop: 15,
+    paddingHorizontal: 30,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   cardContainerWrapper: {
     paddingTop: 20,

@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { FlatList, StyleSheet, Text, TouchableOpacity, View, Image, Button, Alert } from 'react-native'
-import { getCategories } from '../database/firebase-config'
 import { useNavigation } from '@react-navigation/native';
 import COLORS from '../global/COLORS';
 import FONTS from '../global/FONTS';
 
-const CategoryCard = ({ headerTitle }) => {
+const CategoryCard = ({ headerTitle, data }) => {
   const navigation = useNavigation();
-  const [categories, setCategories] = useState([]);
-  useEffect(() => {
-    getCategories(setCategories);
-  }, [])
 
   const alertBox = () => {
     Alert.alert('Sorry!', 'This category is currently empty.', [{ text: "Close", onPress: () => { } }]);
@@ -23,7 +18,7 @@ const CategoryCard = ({ headerTitle }) => {
         scrollEnabled={false}
         numColumns={3}
         showsHorizontalScrollIndicator={false}
-        data={categories}
+        data={data}
         keyExtractor={(item => item.id)}
         renderItem={({ item }) => (
           <View style={styles.cardContainer}>

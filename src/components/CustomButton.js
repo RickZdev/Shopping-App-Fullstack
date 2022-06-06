@@ -1,13 +1,12 @@
-import React, { useState } from 'react'
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { auth, deleteToCart } from '../database/firebase-config'
-import { Feather } from '@expo/vector-icons'
+import { deleteToCart } from '../database/firebase-config'
+import { Feather, FontAwesome, Ionicons } from '@expo/vector-icons'
 import COLORS from '../global/COLORS'
 import FONTS from '../global/FONTS'
 import SHADOWS from '../global/SHADOWS'
-import { set } from 'react-native-reanimated'
-
+import LottieView from 'lottie-react-native'
 
 const CustomMainButton = ({ text, handlePress, customStyle }) => {
   return (
@@ -76,7 +75,22 @@ const CustomDeleteButton = ({ itemToDelete }) => {
   )
 }
 
-export { CustomMainButton, CustomTextButton, CustomBackButton, CustomMenuDrawerButton, CustomSizesButton, CustomDeleteButton }
+const CustomLikeButton = ({ isLike, handlePressLike }) => {
+  return (
+    <TouchableOpacity style={styles.likeButtonContainer} onPress={handlePressLike}>
+      {isLike ?
+        <LottieView
+          source={require('../../assets/animation/likeButton.json')}
+          style={styles.likeButton}
+          autoPlay={true}
+          loop={false}
+        /> :
+        <Ionicons name="heart" size={25} color='black' />}
+    </TouchableOpacity>
+  )
+}
+
+export { CustomMainButton, CustomTextButton, CustomBackButton, CustomMenuDrawerButton, CustomSizesButton, CustomDeleteButton, CustomLikeButton }
 
 const styles = StyleSheet.create({
   buttonContainer: {
@@ -151,4 +165,17 @@ const styles = StyleSheet.create({
     height: 4,
     width: 10,
   },
+  likeButtonContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 25,
+    backgroundColor: COLORS.white,
+    elevation: 7,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  likeButton: {
+    width: 100,
+    height: 100,
+  }
 })

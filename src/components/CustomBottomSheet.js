@@ -22,15 +22,17 @@ const CustomBottomSheet = ({ bottomSheetRef, isOpenBottomSheet, setQuantity, qua
   }
 
   const handleAddToCart = () => {
-    if (!size) {
+    if (product.quantity < quantity) {
+      Alert.alert('', 'Your order exceeds the quantity limit. Please try again.', [{ text: "Got it", onPress: () => { } }]);
+    } else if (!size) {
       isOpenBottomSheet(false)
       Alert.alert('', 'Pick your choosen size.', [{ text: "Got it", onPress: () => { } }]);
-    } else if (quantity > 0) {
+    } else if (quantity <= 0) {
+      Alert.alert('', 'You should add a quantity! Please try again.', [{ text: "Got it", onPress: () => { } }]);
+    } else {
       addToCart(product, quantity, size)
       isOpenBottomSheet(false)
       ToastAndroid.show(`${product.productName} added to cart successfully!`, ToastAndroid.SHORT);
-    } else {
-      Alert.alert('', 'You should add a quantity! Please try again.', [{ text: "Got it", onPress: () => { } }]);
     }
   }
 

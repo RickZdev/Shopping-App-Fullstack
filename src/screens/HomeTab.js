@@ -1,8 +1,8 @@
-import { Animated, Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
+import { Animated, Image, RefreshControl, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { CustomMenuDrawerButton } from '../components/CustomButton';
 import { useScrollToTop } from '@react-navigation/native';
-import { auth, getPopular } from '../database/firebase-config'
+import { auth, getPopular, getCategories } from '../database/firebase-config'
 import HorizontalCard from '../components/HorizontalCard';
 import Banner from '../components/Banner';
 import CategoryCard from '../components/CategoryCard';
@@ -14,22 +14,21 @@ const HomeTab = () => {
     outputRange: [0, -100],
     extrapolate: 'clamp',
   });
-
   const [newArrival, setNewArrival] = useState([])
   const [bestSellers, setBestSellers] = useState([])
-  const isMounted = useRef(true)
+  const [categories, setCategories] = useState([]);
   const ref = useRef(null);
   useScrollToTop(ref);
 
   useEffect(() => {
-    return () => {
-      isMounted.current = false;
-    }
-  }, [])
-
-  useEffect(() => {
+    let isMounted = true;
     getPopular(setNewArrival, 'New arrivals', isMounted)
     getPopular(setBestSellers, 'Best sellers', isMounted)
+    getCategories(setCategories, categories, isMounted);
+
+    return () => {
+      isMounted = false;
+    }
   }, [])
 
   return (
@@ -58,7 +57,7 @@ const HomeTab = () => {
         <View style={styles.scrollViewWrapper}>
           <HorizontalCard headerTitle={'New arrivals'} data={newArrival} customStyle={{ marginTop: 10 }} />
           <Banner headerTitle={'Vans Venice collection'} />
-          <CategoryCard headerTitle={"Shop by Category"} />
+          <CategoryCard headerTitle={"Shop by Category"} data={categories} />
           <HorizontalCard headerTitle={'Best sellers'} data={bestSellers} />
           <Banner headerTitle={'Vans Wayvee drop'} />
         </View>
