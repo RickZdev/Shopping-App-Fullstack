@@ -83,7 +83,7 @@ const logoutUser = async (navigation) => {
 }
 
 // get database
-const getPopular = (setPopularDb, popular, isMounted) => {
+const getPopular = (setPopularDb, popular, isMounted, setIsLoading) => {
   if (isMounted) {
     const ref = query(collection(db, 'products'), where('popular', '==', popular))
     const ref2 = query(doc(db, 'popular', popular))
@@ -91,11 +91,12 @@ const getPopular = (setPopularDb, popular, isMounted) => {
       let tempDb = []
       snapshot.docs.forEach((doc) => {
         tempDb.push({ ...doc.data(), id: doc.id });
-      })
-      setPopularDb(tempDb)
+      });
+      setPopularDb(tempDb);
+      setIsLoading(false);
       await updateDoc(ref2, {
         products: [...tempDb]
-      })
+      });
     })
   }
 }
@@ -126,7 +127,7 @@ const getCategories = (setCategories, categories, isMounted) => {
 
 }
 
-const getCart = (setCartDb, setTotal) => {
+const getCart = (setCartDb, setTotal, setIsLoading) => {
   const q = query(doc(db, 'users', auth.currentUser.uid));
   const unsubscribe = onSnapshot(q, snapshot => {
     let tempCartDb = []
@@ -137,7 +138,9 @@ const getCart = (setCartDb, setTotal) => {
     })
     setTotal(tempTotalPrice)
     setCartDb(tempCartDb)
-
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 1000)
   })
   return unsubscribe;
 }

@@ -6,6 +6,7 @@ import { auth, getPopular, getCategories } from '../database/firebase-config'
 import HorizontalCard from '../components/HorizontalCard';
 import Banner from '../components/Banner';
 import CategoryCard from '../components/CategoryCard';
+import { CustomHomeSkeleton } from '../components/CustomSkeletonCard';
 
 const HomeTab = () => {
   const scrolling = useRef(new Animated.Value(0)).current;
@@ -17,13 +18,15 @@ const HomeTab = () => {
   const [newArrival, setNewArrival] = useState([])
   const [bestSellers, setBestSellers] = useState([])
   const [categories, setCategories] = useState([]);
+  const [isLoading, setIsloading] = useState(true);
+
   const ref = useRef(null);
   useScrollToTop(ref);
 
   useEffect(() => {
     let isMounted = true;
-    getPopular(setNewArrival, 'New arrivals', isMounted)
-    getPopular(setBestSellers, 'Best sellers', isMounted)
+    getPopular(setNewArrival, 'New arrivals', isMounted, setIsloading)
+    getPopular(setBestSellers, 'Best sellers', isMounted, setIsloading)
     getCategories(setCategories, categories, isMounted);
 
     return () => {
@@ -55,11 +58,15 @@ const HomeTab = () => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.scrollViewWrapper}>
-          <HorizontalCard headerTitle={'New arrivals'} data={newArrival} customStyle={{ marginTop: 10 }} />
-          <Banner headerTitle={'Vans Venice collection'} />
-          <CategoryCard headerTitle={"Shop by Category"} data={categories} />
-          <HorizontalCard headerTitle={'Best sellers'} data={bestSellers} />
-          <Banner headerTitle={'Vans Wayvee drop'} />
+          {!isLoading ?
+            <>
+              <HorizontalCard headerTitle={'New arrivals'} data={newArrival} customStyle={{ marginTop: 10 }} />
+              <Banner headerTitle={'Vans Venice collection'} />
+              <CategoryCard headerTitle={"Shop by Category"} data={categories} />
+              <HorizontalCard headerTitle={'Best sellers'} data={bestSellers} />
+              <Banner headerTitle={'Vans Wayvee drop'} />
+            </> : <CustomHomeSkeleton />
+          }
         </View>
       </Animated.ScrollView>
     </>

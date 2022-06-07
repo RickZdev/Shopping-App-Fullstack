@@ -8,24 +8,25 @@ import { CustomDeleteButton } from '../components/CustomButton';
 import CartBottomSheet from '../components/CartBottomSheet';
 import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import LottieView from 'lottie-react-native'
+import { CustomCartSkeleton } from '../components/CustomSkeletonCard';
 
 const CartTab = () => {
   const navigation = useNavigation();
   const [cartDb, setCartDb] = useState([]);
   const [total, setTotal] = useState(0);
-  const [isLoad, setLoad] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const ref = useRef(null);
 
   useScrollToTop(ref);
   useEffect(() => {
-    getCart(setCartDb, setTotal);
-    setLoad(true);
+    getCart(setCartDb, setTotal, setIsLoading);
   }, [])
 
   const onRefresh = () => {
     setRefreshing(true)
-    navigation.navigate('CartTab');
+    setIsLoading(true)
+    getCart(setCartDb, setTotal, setIsLoading);
     setRefreshing(false)
   }
 
@@ -46,25 +47,34 @@ const CartTab = () => {
         data={cartDb}
         keyExtractor={(item => item.cartId)}
         renderItem={({ item }) => (
+
           <View style={styles.categoryListContainer}>
-            <CategoryList
-              data={item}
-              customDeleteButton={<CustomDeleteButton itemToDelete={item} />}
-              disableNavigation={true}
-            />
+            {!isLoading ?
+              <CategoryList
+                data={item}
+                customDeleteButton={<CustomDeleteButton itemToDelete={item} />}
+                disableNavigation={true}
+              />
+              : <CustomCartSkeleton />
+            }
           </View>
         )}
         getItemCount={cartDb => cartDb.length}
         getItem={(cartDb, index) => cartDb[index]}
         ListEmptyComponent={() => (
           <View style={styles.noCartContainer}>
-            <LottieView
-              source={require('../../assets/animation/cart.json')}
-              style={styles.noCartAnimation}
-              autoPlay={true}
-              loop={true}
-            />
-            <Text style={styles.noCartText}> There is nothing in your cart. </Text>
+            {!isLoading ?
+              <>
+                <LottieView
+                  source={require('../../assets/animation/cart.json')}
+                  style={styles.noCartAnimation}
+                  autoPlay={true}
+                  loop={true}
+                />
+                <Text style={styles.noCartText}> There is nothing in your cart. </Text>
+              </>
+              : null
+            }
           </View>
         )}
       />

@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^4.3.1",
+    "@nlazzos/react-native-skeleton": "^1.0.3",
     "@react-native-async-storage/async-storage": "~1.17.3",
+    "@react-native-masked-view/masked-view": "^0.2.6",
     "@react-native-picker/picker": "^2.4.0",
     "@react-navigation/bottom-tabs": "^6.3.1",
     "@react-navigation/drawer": "^6.4.1",
