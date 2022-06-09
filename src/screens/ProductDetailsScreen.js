@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert, ScrollView } from 'react-native'
 import { CustomBackButton, CustomLikeButton, CustomSizesButton } from '../components/CustomButton'
 import { AntDesign } from '@expo/vector-icons'
 import CustomBottomSheet from '../components/CustomBottomSheet'
@@ -7,7 +7,7 @@ import COLORS from '../global/COLORS'
 import FONTS from '../global/FONTS'
 import { addLike, getLikes, getNumberOfLikes } from '../database/firebase-config';
 
-const ProductDetailsScreen = ({ route }) => {
+const ProductDetailsScreen = ({ route, navigation }) => {
   const product = route.params;
   const bottomSheetRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -41,7 +41,7 @@ const ProductDetailsScreen = ({ route }) => {
   }
 
   return (
-    <View style={[styles.container,]}>
+    <ScrollView contentContainerStyle={[styles.container,]}>
       <View style={styles.cardContainer}>
         <View style={styles.header}>
           <CustomBackButton />
@@ -82,7 +82,7 @@ const ProductDetailsScreen = ({ route }) => {
         isOpen ? <CustomBottomSheet bottomSheetRef={bottomSheetRef} isOpenBottomSheet={setIsOpen}
           setQuantity={setOrderQuantity} quantity={orderQuantity} product={product} size={orderSize} /> : null
       }
-    </View>
+    </ScrollView>
   )
 }
 

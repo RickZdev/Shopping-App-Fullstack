@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View, } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AntDesign } from '@expo/vector-icons'
 import COLORS from '../global/COLORS'
 import FONTS from '../global/FONTS'
@@ -14,12 +14,28 @@ const CartBottomSheet = ({ cartDb, total }) => {
   const [isOpen, setIsOpen] = useState(false);
   const snapPoints = useMemo(() => ['45%'], []);
   const bottomSheetRef = useRef(null);
+  const [buttonText, setButtonText] = useState('Checkout')
+  const [showLoading, setShowLoading] = useState(false);
 
   const handleOpenBottomSheet = useCallback((index) => {
     bottomSheetRef.current?.snapToIndex(index);
     setIsOpen(true);
   }, [])
 
+  const handleCheckOut = () => {
+    setButtonText('Please Wait')
+    setShowLoading(!showLoading);
+    setTimeout(() => {
+      navigation.navigate('PaymentSuccessScreen')
+      setButtonText('Checkout')
+    }, 3000)
+  }
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShowLoading(false)
+    }, 3000)
+  }, [showLoading])
   return (
     <>
       <TouchableOpacity style={styles.cartButtonContainer} onPress={() => handleOpenBottomSheet(0)}>
@@ -52,7 +68,7 @@ const CartBottomSheet = ({ cartDb, total }) => {
                 <Text style={styles.totalText}> Total: </Text>
                 <Text style={styles.totalText}> {total}</Text>
               </View>
-              <CustomMainButton text={"Checkout"} handlePress={() => navigation.navigate('PaymentSuccessScreen')} />
+              <CustomMainButton text={buttonText} handlePress={!showLoading ? handleCheckOut : null} showLoading={showLoading} />
             </ScrollView>
           </BottomSheetView>
         </BottomSheet>

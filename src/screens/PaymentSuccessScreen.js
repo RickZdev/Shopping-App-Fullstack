@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import LottieView from 'lottie-react-native'
-import { CustomBackButton } from '../components/CustomButton'
 import COLORS from '../global/COLORS'
 import FONTS from '../global/FONTS'
 

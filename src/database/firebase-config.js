@@ -1,8 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { addDoc, collection, doc, getFirestore, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where, getDoc, arrayRemove, arrayUnion, getDocs } from 'firebase/firestore'
-import { getAuth, updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { getAuth, updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, s, sendPasswordResetEmail } from 'firebase/auth'
 import { ref, uploadBytes, getDownloadURL, getStorage } from 'firebase/storage'
-import { ToastAndroid } from "react-native";
+import { Alert, ToastAndroid } from "react-native";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCRrjMVXW0zRWWBxIM9NFrr-CjT5_Vgpcs",
@@ -30,13 +30,18 @@ const addAuthenticatedUser = async (values, navigation) => {
       photoURL: 'https://firebasestorage.googleapis.com/v0/b/shopping-app-be469.appspot.com/o/images%2Favatar%2Favatar.jpg?alt=media&token=32022140-2a82-4c45-8a4b-9fe6f500eba4'
     })
     await addUserToDatabase(user, { phoneNumber })
+    ToastAndroid.showWithGravityAndOffset(
+      `Account Created Successfully!`,
+      ToastAndroid.SHORT,
+      ToastAndroid.BOTTOM,
+      0, 300)
   } catch (error) {
     console.log(error.message)
   }
 }
 
 const addUserToDatabase = async (user, additionalData) => {
-  const { email, displayName, uid } = user;
+  const { email, displayName, uid, photoURL } = user;
   const { phoneNumber } = additionalData;
 
   // add user data to firestore with same authenticated id
@@ -47,6 +52,7 @@ const addUserToDatabase = async (user, additionalData) => {
       email,
       phoneNumber,
       cart: [],
+      photoURL,
       createdAt: serverTimestamp()
     })
   } catch (error) {
@@ -54,28 +60,82 @@ const addUserToDatabase = async (user, additionalData) => {
   }
 }
 
-const addAuthProfile = async (imageUri) => {
+const updateUserPhoto = async (imageUri) => {
+  let imageUrl = '';
+
+  if (imageUri !== '') {
+    const storageRef = ref(storage, `/images/avatar/${auth.currentUser.uid}`)
+
+    const img = await fetch(imageUri);
+    const bytes = await img.blob()
+
+    await uploadBytes(storageRef, bytes, { contentType: 'image/jpg' })
+    imageUrl = await getDownloadURL(storageRef);
+  }
+
   try {
     await updateProfile(auth.currentUser, {
-      photoURL: imageUri,
+      photoURL: imageUrl,
     })
+
+    await updateDoc(doc(db, 'users', auth.currentUser.uid), {
+      photoURL: imageUrl,
+    })
+
+
   } catch (error) {
     console.log(error.message)
   }
 }
 
+const resetPassword = async (email) => {
+  try {
+
+    await sendPasswordResetEmail(auth, email);
+    ToastAndroid.showWithGravityAndOffset(
+      `Reset password link sent successfully!`,
+      ToastAndroid.SHORT,
+      ToastAndroid.BOTTOM,
+      0, 300)
+  } catch (error) {
+    Alert.alert('', 'Wrong password, Please try again', [{ text: "Okay", onPress: () => { } }]);
+  }
+}
+
+const getUserPhoto = async (setImageUri) => {
+  const q = query(doc(db, 'users', auth.currentUser.uid))
+  onSnapshot(q, snapshot => {
+    setImageUri(snapshot.data().photoURL);
+  })
+
+}
+
 const loginUser = async (email, password, navigation) => {
   try {
     const { user } = await signInWithEmailAndPassword(auth, email, password)
+    ToastAndroid.showWithGravityAndOffset(
+      `Log in successfully!`,
+      ToastAndroid.SHORT,
+      ToastAndroid.BOTTOM,
+      0, 300)
     navigation.replace('HomeScreen');
   } catch (error) {
-    console.log(error.message)
+    if (error.message == 'Firebase: Error (auth/user-not-found).') {
+      Alert.alert('', 'Email Address Not Found. Please try again!', [{ text: "Try again", onPress: () => { } }]);
+    } else {
+      Alert.alert('', 'Wrong Password. Please try again!', [{ text: "Try again", onPress: () => { } }]);
+    }
   }
 }
 
 const logoutUser = async (navigation) => {
   try {
     await signOut(auth)
+    ToastAndroid.showWithGravityAndOffset(
+      `Log out successfully!`,
+      ToastAndroid.SHORT,
+      ToastAndroid.BOTTOM,
+      0, 300)
     navigation.replace('LoginScreen');
   } catch (error) {
     console.log(error.message)
@@ -140,7 +200,7 @@ const getCart = (setCartDb, setTotal, setIsLoading) => {
     setCartDb(tempCartDb)
     setTimeout(() => {
       setIsLoading(false)
-    }, 1000)
+    }, 200)
   })
   return unsubscribe;
 }
@@ -271,7 +331,7 @@ const deleteToCart = async (itemToDelete) => {
 }
 
 export {
-  auth, db, storage, addAuthenticatedUser, addAuthProfile, loginUser, logoutUser,
+  auth, db, storage, addAuthenticatedUser, updateUserPhoto, getUserPhoto, resetPassword, loginUser, logoutUser,
   getPopular, getCategories, getCart, getNumberOfCart, getLikes, getNumberOfLikes,
   addProducts, addToCart, addLike,
   deleteToCart

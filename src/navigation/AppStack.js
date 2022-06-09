@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import ProductDetailsScreen from '../screens/ProductDetailsScreen';
 import CategoryScreen from '../screens/CategoryScreen'
 import PaymentSuccessScreen from '../screens/PaymentSuccessScreen'
+import CheckoutScreen from '../screens/CheckoutScreen'
 import HomeTab from '../screens/HomeTab'
 import CartTab from '../screens/CartTab';
 
@@ -14,6 +15,7 @@ const HomeStack = () => {
       <Stack.Screen name="HomeTab" component={HomeTab} />
       <Stack.Screen name="CategoryScreen" component={CategoryScreen} />
       <Stack.Screen name="ProductDetailsScreen" component={ProductDetailsScreen} />
+      <Stack.Screen name="CheckoutScreen" component={CheckoutScreen} />
       <Stack.Screen name="PaymentSuccessScreen" component={PaymentSuccessScreen} />
     </Stack.Navigator>
   )

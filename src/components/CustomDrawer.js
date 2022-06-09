@@ -2,27 +2,36 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { DrawerContentScrollView, DrawerItem, DrawerItemList, useDrawerProgress } from '@react-navigation/drawer'
 import COLORS from '../global/COLORS'
-import { auth, logoutUser } from '../database/firebase-config'
+import { auth, getUserPhoto, logoutUser } from '../database/firebase-config'
 import FONTS from '../global/FONTS'
 import * as ImagePicker from 'expo-image-picker'
-import { addAuthProfile } from '../database/firebase-config'
+import { updateUserPhoto } from '../database/firebase-config'
 import { useNavigation } from '@react-navigation/native'
 import { SimpleLineIcons, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 const CustomDrawer = (props) => {
   const navigation = useNavigation();
-  const [imageUri, setImageUri] = useState(auth.currentUser.photoURL);
+  const [imageUri, setImageUri] = useState('https://firebasestorage.googleapis.com/v0/b/shopping-app-be469.appspot.com/o/images%2Favatar%2Favatar.jpg?alt=media&token=e351f21f-5741-400a-9355-3fcf08865644');
+
+  useEffect(() => {
+    let isMounted = true;
+    getUserPhoto(setImageUri);
+
+    return () => {
+      isMounted = false;
+    }
+  }, [])
 
   const handlePressSelectPhoto = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
     });
-    console.log('current', auth.currentUser.photoURL);
     if (!result.cancelled) {
       setImageUri(result.uri)
-      addAuthProfile(result.uri)
+      updateUserPhoto(result.uri)
+
     }
   }
 

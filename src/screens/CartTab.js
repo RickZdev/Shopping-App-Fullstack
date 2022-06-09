@@ -27,7 +27,9 @@ const CartTab = () => {
     setRefreshing(true)
     setIsLoading(true)
     getCart(setCartDb, setTotal, setIsLoading);
-    setRefreshing(false)
+    setTimeout(() => {
+      setRefreshing(false)
+    }, 200)
   }
 
   return (

@@ -32,7 +32,7 @@ const LoginScreen = () => {
             <CustomTextInput label={"EMAIL"} onchangeValue={formikProps.handleChange('email')} value={formikProps.values.email} />
             <CustomPasswordInput label={"PASSWORD"} onchangeValue={formikProps.handleChange('password')} value={formikProps.values.password} />
             <CustomMainButton text={"Login"} handlePress={formikProps.handleSubmit} />
-            <CustomTextButton text={'Forgot Password'} customStyle={styles.formForgotPass} customTextStyle={styles.formForgotPassText} />
+            <CustomTextButton text={'Forgot Password'} customStyle={styles.formForgotPass} customTextStyle={styles.formForgotPassText} handlePress={() => navigation.navigate('ForgotPasswordScreen')} />
             <CustomTextButton text={"Don't have an account yet? Register"} handlePress={() => navigation.navigate('SignUpScreen')} />
           </View>
         )}
@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
   formContainer: {
     marginTop: 137,
     marginHorizontal: 47,
+    paddingBottom: 32
   },
   formForgotPass: {
     alignItems: 'center',

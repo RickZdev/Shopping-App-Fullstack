@@ -8,11 +8,20 @@ import FONTS from '../global/FONTS'
 import SHADOWS from '../global/SHADOWS'
 import LottieView from 'lottie-react-native'
 
-const CustomMainButton = ({ text, handlePress, customStyle }) => {
+const CustomMainButton = ({ text, handlePress, customStyle, showLoading }) => {
   return (
     <>
       <TouchableOpacity style={[styles.buttonContainer, customStyle]} onPress={handlePress} activeOpacity={0.5}>
         <Text style={styles.buttonText}>{text}</Text>
+        {
+          showLoading ?
+            <LottieView
+              source={require('../../assets/animation/loading.json')}
+              autoPlay
+              loop={true}
+              style={{ marginLeft: 60, }}
+            /> : null
+        }
       </TouchableOpacity>
     </>
   )
