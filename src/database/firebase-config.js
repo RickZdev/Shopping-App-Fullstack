@@ -90,7 +90,6 @@ const updateUserPhoto = async (imageUri) => {
 
 const resetPassword = async (email) => {
   try {
-
     await sendPasswordResetEmail(auth, email);
     ToastAndroid.showWithGravityAndOffset(
       `Reset password link sent successfully!`,
@@ -104,10 +103,10 @@ const resetPassword = async (email) => {
 
 const getUserPhoto = async (setImageUri) => {
   const q = query(doc(db, 'users', auth.currentUser.uid))
-  onSnapshot(q, snapshot => {
+  const unsubscribe = onSnapshot(q, snapshot => {
     setImageUri(snapshot.data().photoURL);
   })
-
+  return unsubscribe;
 }
 
 const loginUser = async (email, password, navigation) => {
@@ -147,7 +146,7 @@ const getPopular = (setPopularDb, popular, isMounted, setIsLoading) => {
   if (isMounted) {
     const ref = query(collection(db, 'products'), where('popular', '==', popular))
     const ref2 = query(doc(db, 'popular', popular))
-    onSnapshot(ref, async (snapshot) => {
+    const unsubscribe = onSnapshot(ref, async (snapshot) => {
       let tempDb = []
       snapshot.docs.forEach((doc) => {
         tempDb.push({ ...doc.data(), id: doc.id });
@@ -158,6 +157,8 @@ const getPopular = (setPopularDb, popular, isMounted, setIsLoading) => {
         products: [...tempDb]
       });
     })
+
+    return unsubscribe;
   }
 }
 
@@ -237,6 +238,31 @@ const getNumberOfLikes = (setNumberOfLikes, product, isMounted) => {
   }
 }
 
+const getOrders = ({ setOrderDb }) => {
+  const q = query(doc(db, 'users', auth.currentUser.uid))
+  const unsubscribe = onSnapshot(q, snapshot => {
+    let tempOrderDb = []
+    snapshot.data().order?.map((item) => {
+      tempOrderDb.push(item)
+    })
+    setOrderDb(tempOrderDb)
+  })
+
+  return unsubscribe;
+}
+
+const getOrderHistory = (setOrderHistoryDb) => {
+  const q = query(doc(db, 'users', auth.currentUser.uid))
+  const unsubscribe = onSnapshot(q, snapshot => {
+    let tempOrderHistoryDb = []
+    snapshot.data().orderHistory.map((item) => {
+      tempOrderHistoryDb.push(item)
+    })
+    setOrderHistoryDb(tempOrderHistoryDb)
+  })
+
+  return unsubscribe;
+}
 // add to database
 const addToCart = async (product, quantity, size) => {
   const q = query(doc(db, 'users', auth.currentUser.uid));
@@ -245,6 +271,26 @@ const addToCart = async (product, quantity, size) => {
   const totalPrice = quantity * product.price;
   await updateDoc(q, {
     cart: arrayUnion({ ...product, cartId, orderQuantity: quantity, orderSize: size, totalPrice, })
+  })
+}
+
+const addToOrder = async (productDetails, cartDb, orderDb) => {
+  const cartQuery = query(doc(db, 'users', auth.currentUser.uid));
+  let date = new Date().toDateString();
+  let newDb = []
+  cartDb.forEach(item => {
+    newDb.push({ ...item, ...productDetails, orderDate: date });
+  })
+  await updateDoc(cartQuery, {
+    order: arrayUnion(...newDb, ...orderDb)
+  })
+}
+
+const addToOrderHistory = async (product) => {
+  const q = query(doc(db, 'users', auth.currentUser.uid))
+  const receivedDate = new Date().toDateString();
+  await updateDoc(q, {
+    orderHistory: arrayUnion({ ...product, receivedBy: receivedDate })
   })
 }
 
@@ -330,9 +376,23 @@ const deleteToCart = async (itemToDelete) => {
     0, 300)
 }
 
+const deleteCurrentCart = async () => {
+  const q = query(doc(db, 'users', auth.currentUser.uid))
+  await updateDoc(q, {
+    cart: []
+  })
+}
+
+const deleteOrderReceived = async (itemToDelete) => {
+  const q = doc(db, 'users', auth.currentUser.uid)
+  await updateDoc(q, {
+    order: arrayRemove(itemToDelete),
+  })
+}
+
 export {
   auth, db, storage, addAuthenticatedUser, updateUserPhoto, getUserPhoto, resetPassword, loginUser, logoutUser,
-  getPopular, getCategories, getCart, getNumberOfCart, getLikes, getNumberOfLikes,
-  addProducts, addToCart, addLike,
-  deleteToCart
+  getPopular, getCategories, getCart, getNumberOfCart, getLikes, getNumberOfLikes, getOrders, getOrderHistory,
+  addProducts, addToCart, addLike, addToOrder, addToOrderHistory,
+  deleteToCart, deleteCurrentCart, deleteOrderReceived
 }

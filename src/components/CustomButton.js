@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { deleteToCart } from '../database/firebase-config'
+import { deleteOrderReceived, deleteToCart } from '../database/firebase-config'
 import { Feather, FontAwesome, Ionicons } from '@expo/vector-icons'
 import COLORS from '../global/COLORS'
 import FONTS from '../global/FONTS'
 import SHADOWS from '../global/SHADOWS'
 import LottieView from 'lottie-react-native'
 
-const CustomMainButton = ({ text, handlePress, customStyle, showLoading }) => {
+const CustomMainButton = ({ text, handlePress, customStyle, customText, showLoading }) => {
   return (
     <>
       <TouchableOpacity style={[styles.buttonContainer, customStyle]} onPress={handlePress} activeOpacity={0.5}>
-        <Text style={styles.buttonText}>{text}</Text>
+        <Text style={[styles.buttonText, customText]}>{text}</Text>
         {
           showLoading ?
             <LottieView

@@ -17,10 +17,15 @@ const CartTab = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const ref = useRef(null);
-
   useScrollToTop(ref);
+
   useEffect(() => {
+    let isMount = true;
     getCart(setCartDb, setTotal, setIsLoading);
+
+    return () => {
+      isMount = false;
+    }
   }, [])
 
   const onRefresh = () => {

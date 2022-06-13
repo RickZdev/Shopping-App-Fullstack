@@ -14,7 +14,12 @@ const BottomTab = () => {
   const [numberOfCart, setNumberOfCart] = useState(0);
 
   useEffect(() => {
+    let isMount = true;
     getNumberOfCart(setNumberOfCart);
+
+    return () => {
+      isMount = false;
+    }
   }, [])
 
   return (
