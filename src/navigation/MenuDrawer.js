@@ -27,11 +27,11 @@ const MenuDrawer = () => {
         }}
         drawerContent={props => <CustomDrawer {...props} />} >
         <Drawer.Screen name="HomeDrawer" component={BottomTab} options={{ drawerItemStyle: { display: 'none' } }} />
-        <Drawer.Screen name="EditDetailsDrawer" component={EditDetailsDrawer}
+        {/* <Drawer.Screen name="EditDetailsDrawer" component={EditDetailsDrawer}
           options={{
             drawerLabel: 'Edit Details',
             drawerIcon: ({ size, color }) => <Feather name="edit" size={size} color={color} />,
-          }} />
+          }} /> */}
         <Drawer.Screen name="OrdersDrawer" component={OrdersDrawer}
           options={{
             drawerLabel: 'Track My Orders',

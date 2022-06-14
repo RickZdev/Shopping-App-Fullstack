@@ -142,6 +142,20 @@ const logoutUser = async (navigation) => {
 }
 
 // get database
+const getAllProducts = (setProductsDb) => {
+  const q = query(collection(db, 'products'));
+  const unsubscribe = onSnapshot(q, snapshot => {
+    let tempProductsDb = [];
+    snapshot.docs.forEach(doc => {
+      tempProductsDb.push({ ...doc.data(), id: doc.id });
+    })
+
+    setProductsDb(tempProductsDb);
+  })
+
+  return unsubscribe;
+}
+
 const getPopular = (setPopularDb, popular, isMounted, setIsLoading) => {
   if (isMounted) {
     const ref = query(collection(db, 'products'), where('popular', '==', popular))
@@ -186,6 +200,24 @@ const getCategories = (setCategories, categories, isMounted) => {
     })
   })
 
+}
+
+const getCollection = (bannerName, setCollectionDb, setCollectionImage) => {
+  const q = query(doc(db, 'banner', bannerName));
+  onSnapshot(q, snapshot => {
+    setCollectionImage(snapshot.data().image)
+  })
+
+  const category = bannerName === 'Vans Venice Collection' ? 'shoes' : 'sweater';
+
+  const q2 = query(collection(db, 'products'), where('categories', '==', category));
+  let tempCollectionDb = [];
+  onSnapshot(q2, snapshot => {
+    snapshot.docs.forEach(item => {
+      tempCollectionDb.push({ ...item.data(), id: item.id });
+    })
+    setCollectionDb(tempCollectionDb)
+  })
 }
 
 const getCart = (setCartDb, setTotal, setIsLoading) => {
@@ -392,7 +424,7 @@ const deleteOrderReceived = async (itemToDelete) => {
 
 export {
   auth, db, storage, addAuthenticatedUser, updateUserPhoto, getUserPhoto, resetPassword, loginUser, logoutUser,
-  getPopular, getCategories, getCart, getNumberOfCart, getLikes, getNumberOfLikes, getOrders, getOrderHistory,
+  getPopular, getCategories, getCart, getNumberOfCart, getLikes, getNumberOfLikes, getOrders, getOrderHistory, getCollection, getAllProducts,
   addProducts, addToCart, addLike, addToOrder, addToOrderHistory,
   deleteToCart, deleteCurrentCart, deleteOrderReceived
 }

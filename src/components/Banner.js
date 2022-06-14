@@ -1,14 +1,17 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity, ImageBackground, } from 'react-native'
 import FONTS from '../global/FONTS'
 
-const Banner = ({ headerTitle }) => {
+const Banner = ({ headerTitle, navigation, bannerName, headerText, headerDescription, image }) => {
+  const data = { bannerName, headerText, headerDescription }
   return (
     <View style={[styles.container]}>
       <Text style={styles.title}>{headerTitle}</Text>
-      <ImageBackground
-        source={require('../../assets/images/banner1.png')}
-        style={styles.image}
-        resizeMode='contain' />
+      <TouchableOpacity onPress={() => navigation.navigate('CollectionScreen', data)}>
+        <ImageBackground
+          source={{ uri: image }}
+          style={styles.image}
+          resizeMode='contain' />
+      </TouchableOpacity>
     </View>
   )
 }

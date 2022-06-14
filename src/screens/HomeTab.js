@@ -8,7 +8,7 @@ import Banner from '../components/Banner';
 import CategoryCard from '../components/CategoryCard';
 import { CustomHomeSkeleton } from '../components/CustomSkeletonCard';
 
-const HomeTab = () => {
+const HomeTab = ({ navigation }) => {
   const scrolling = useRef(new Animated.Value(0)).current;
   const translation = scrolling.interpolate({
     inputRange: [50, 130],
@@ -61,10 +61,24 @@ const HomeTab = () => {
           {!isLoading ?
             <>
               <HorizontalCard headerTitle={'New arrivals'} data={newArrival} customStyle={{ marginTop: 10 }} />
-              <Banner headerTitle={'Vans Venice collection'} />
+              <Banner
+                navigation={navigation}
+                image={'https://firebasestorage.googleapis.com/v0/b/shopping-app-be469.appspot.com/o/images%2Fbanner%2Fbanner1.png?alt=media&token=c002ed22-ac6b-4fbc-b77c-3d3d241f995c'}
+                headerTitle={'Vans Venice collection'}
+                bannerName={'Vans Venice Collection'}
+                headerText={'Vans Venice Collection'}
+                headerDescription={'Authentic and sturdy skate apparel with a uniquely L.A aesthetic Bold, hardy and ready to skate.'}
+              />
               <CategoryCard headerTitle={"Shop by Category"} data={categories} />
               <HorizontalCard headerTitle={'Best sellers'} data={bestSellers} />
-              <Banner headerTitle={'Vans Wayvee drop'} />
+              <Banner
+                navigation={navigation}
+                image={'https://firebasestorage.googleapis.com/v0/b/shopping-app-be469.appspot.com/o/images%2Fbanner%2Fbanner2.png?alt=media&token=87ba7a15-dc06-481c-9b45-375a1e3d80e8'}
+                headerTitle={'Vans Wayvee drop'}
+                bannerName={'Vans Wayvee Drop'}
+                headerText={'Vans Wayvee Drop'}
+                headerDescription={'Vans have combined a lot of their technical features in the Wayvee, making the new model one of the most advanced skate attire around.'}
+              />
             </> : <CustomHomeSkeleton />
           }
         </View>
