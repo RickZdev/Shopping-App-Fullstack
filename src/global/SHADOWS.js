@@ -1,3 +1,5 @@
+// SHADOW css-element working only for ios
+// ELEVATION css-element is the equivalent for android
 const SHADOWS = {
   light: {
     shadowColor: '#74858C',

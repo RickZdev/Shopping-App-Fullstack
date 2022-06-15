@@ -1,13 +1,13 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, Alert, ScrollView } from 'react-native'
-import { CustomBackButton, CustomLikeButton, CustomSizesButton } from '../components/CustomButton'
 import { AntDesign } from '@expo/vector-icons'
+import { CustomBackButton, CustomLikeButton, CustomSizesButton } from '../components/CustomButton'
+import { addLike, getLikes, getNumberOfLikes } from '../database/firebase-config';
 import CustomBottomSheet from '../components/CustomBottomSheet'
 import COLORS from '../global/COLORS'
 import FONTS from '../global/FONTS'
-import { addLike, getLikes, getNumberOfLikes } from '../database/firebase-config';
 
-const ProductDetailsScreen = ({ route, navigation }) => {
+const ProductDetailsScreen = ({ route }) => {
   const product = route.params;
   const bottomSheetRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -41,47 +41,51 @@ const ProductDetailsScreen = ({ route, navigation }) => {
   }
 
   return (
-    <ScrollView contentContainerStyle={[styles.container,]}>
-      <View style={styles.cardContainer}>
-        <View style={styles.header}>
-          <CustomBackButton />
-          <CustomLikeButton isLike={isLike} handlePressLike={handlePressLike} />
-        </View>
-        <View style={styles.cardContainerWrapper}>
-          <View style={styles.imageWrapper}>
-            <Image
-              source={{ uri: product.imageURL }}
-              style={[styles.image,]}
-              resizeMode='contain'
-            />
+    <ScrollView style={[styles.container,]}>
+      <View style={{ paddingBottom: 20, }}>
+
+        <View style={styles.cardContainer}>
+          <View style={styles.header}>
+            <CustomBackButton />
+            <CustomLikeButton isLike={isLike} handlePressLike={handlePressLike} />
           </View>
-          <View style={styles.middlePart}>
-            <View style={{ marginBottom: 24 }}>
-              <Text style={{ fontSize: 18, fontFamily: FONTS.DMSansBold, }}>{product.productName}</Text>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text style={{ fontSize: 12, fontFamily: FONTS.DMSansBold, paddingTop: 5, color: COLORS.gray }}>Liked by: {numberOfLikes}</Text>
-                {product.quantity > 0 ?
-                  <Text style={{ fontSize: 12, fontFamily: FONTS.DMSansBold, paddingTop: 5, color: COLORS.gray }}>Quantity: {product.quantity}</Text> :
-                  <Text style={{ fontSize: 12, fontFamily: FONTS.DMSansBold, paddingTop: 5, color: COLORS.gray }}>Out of Stock</Text>
-                }
-              </View>
+          <View style={styles.cardContainerWrapper}>
+            <View style={styles.imageWrapper}>
+              <Image
+                source={{ uri: product.imageURL }}
+                style={[styles.image,]}
+                resizeMode='contain'
+              />
             </View>
-            <Text style={{ fontSize: 12, fontFamily: FONTS.DMSansRegular, color: COLORS.gray, marginBottom: 24 }}>{product.description}</Text>
-            <Text style={{ fontSize: 18, fontFamily: FONTS.DMSansBold }}>P{product.price}</Text>
-          </View>
-          <View style={styles.bottom}>
-            <CustomSizesButton data={product} setOrderSize={setOrderSize} />
-            <TouchableOpacity style={styles.bottomRight} onPress={() => handleOpenBottomSheet(0)}>
-              <AntDesign name='shoppingcart' size={30} color={COLORS.white} />
-            </TouchableOpacity>
+            <View style={styles.middlePart}>
+              <View style={{ marginBottom: 24 }}>
+                <Text style={{ fontSize: 18, fontFamily: FONTS.DMSansBold, }}>{product.productName}</Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <Text style={{ fontSize: 12, fontFamily: FONTS.DMSansBold, paddingTop: 5, color: COLORS.gray }}>Liked by: {numberOfLikes}</Text>
+                  {product.quantity > 0 ?
+                    <Text style={{ fontSize: 12, fontFamily: FONTS.DMSansBold, paddingTop: 5, color: COLORS.gray }}>Quantity: {product.quantity}</Text> :
+                    <Text style={{ fontSize: 12, fontFamily: FONTS.DMSansBold, paddingTop: 5, color: COLORS.gray }}>Out of Stock</Text>
+                  }
+                </View>
+              </View>
+              <Text style={{ fontSize: 12, fontFamily: FONTS.DMSansRegular, color: COLORS.gray, marginBottom: 24 }}>{product.description}</Text>
+              <Text style={{ fontSize: 18, fontFamily: FONTS.DMSansBold }}>P{product.price}</Text>
+            </View>
+            <View style={styles.bottom}>
+              <CustomSizesButton data={product} setOrderSize={setOrderSize} />
+              <TouchableOpacity style={styles.bottomRight} onPress={() => handleOpenBottomSheet(0)}>
+                <AntDesign name='shoppingcart' size={30} color={COLORS.white} />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
+        {
+          // bottom sheet
+          isOpen ? <CustomBottomSheet bottomSheetRef={bottomSheetRef} isOpenBottomSheet={setIsOpen}
+            setQuantity={setOrderQuantity} quantity={orderQuantity} product={product} size={orderSize} /> : null
+        }
       </View>
-      {
-        // bottom sheet
-        isOpen ? <CustomBottomSheet bottomSheetRef={bottomSheetRef} isOpenBottomSheet={setIsOpen}
-          setQuantity={setOrderQuantity} quantity={orderQuantity} product={product} size={orderSize} /> : null
-      }
+
     </ScrollView>
   )
 }
@@ -110,6 +114,7 @@ const styles = StyleSheet.create({
   },
   cardContainerWrapper: {
     paddingTop: 20,
+
   },
   imageWrapper: {
     width: 230,

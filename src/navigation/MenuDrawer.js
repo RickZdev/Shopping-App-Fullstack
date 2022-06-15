@@ -1,15 +1,13 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { createDrawerNavigator } from '@react-navigation/drawer'
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import CustomDrawer from '../components/CustomDrawer'
 import BottomTab from './BottomTab'
-import COLORS from '../global/COLORS'
 import OrdersDrawer from '../screens/OrdersDrawer'
 import OrderHistoryDrawer from '../screens/OrderHistoryDrawer'
-import EditDetailsDrawer from '../screens/EditDetailsDrawer'
-import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import COLORS from '../global/COLORS'
 import FONTS from '../global/FONTS'
-
 
 const Drawer = createDrawerNavigator();
 
@@ -27,11 +25,6 @@ const MenuDrawer = () => {
         }}
         drawerContent={props => <CustomDrawer {...props} />} >
         <Drawer.Screen name="HomeDrawer" component={BottomTab} options={{ drawerItemStyle: { display: 'none' } }} />
-        {/* <Drawer.Screen name="EditDetailsDrawer" component={EditDetailsDrawer}
-          options={{
-            drawerLabel: 'Edit Details',
-            drawerIcon: ({ size, color }) => <Feather name="edit" size={size} color={color} />,
-          }} /> */}
         <Drawer.Screen name="OrdersDrawer" component={OrdersDrawer}
           options={{
             drawerLabel: 'Track My Orders',

@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, ImageBackground, } from 'react-native'
+import React from 'react'
+import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, } from 'react-native'
 import FONTS from '../global/FONTS'
 
 const Banner = ({ headerTitle, navigation, bannerName, headerText, headerDescription, image }) => {

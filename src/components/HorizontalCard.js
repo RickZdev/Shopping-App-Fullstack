@@ -1,9 +1,9 @@
 import React from 'react'
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
+import { Feather } from '@expo/vector-icons'
 import COLORS from '../global/COLORS';
 import FONTS from '../global/FONTS'
-import { Feather } from '@expo/vector-icons'
 
 const HorizontalCard = ({ headerTitle, data, customStyle }) => {
   const navigation = useNavigation();

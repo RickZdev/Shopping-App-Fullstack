@@ -1,17 +1,16 @@
-import { RefreshControl, StyleSheet, Text, View, VirtualizedList } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
-import COLORS from '../global/COLORS'
+import { RefreshControl, StyleSheet, Text, View, VirtualizedList } from 'react-native'
+import { CustomDeleteButton } from '../components/CustomButton';
+import { CustomCartSkeleton } from '../components/CustomSkeletonCard';
+import { useScrollToTop } from '@react-navigation/native';
 import { getCart } from '../database/firebase-config';
 import CategoryList from '../components/CategoryList';
-import FONTS from '../global/FONTS';
-import { CustomDeleteButton } from '../components/CustomButton';
 import CartBottomSheet from '../components/CartBottomSheet';
-import { useNavigation, useScrollToTop } from '@react-navigation/native';
 import LottieView from 'lottie-react-native'
-import { CustomCartSkeleton } from '../components/CustomSkeletonCard';
+import COLORS from '../global/COLORS'
+import FONTS from '../global/FONTS';
 
 const CartTab = () => {
-  const navigation = useNavigation();
   const [cartDb, setCartDb] = useState([]);
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(true);

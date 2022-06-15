@@ -1,16 +1,14 @@
+import React, { useCallback, useMemo } from 'react'
 import { Alert, StyleSheet, Text, TouchableOpacity, View, ToastAndroid } from 'react-native'
-import React, { useCallback, useMemo, useRef, useState } from 'react'
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
-import COLORS from '../global/COLORS';
 import { addToCart } from '../database/firebase-config';
 import { CustomMainButton } from './CustomButton';
-import { useNavigation } from '@react-navigation/native';
+import COLORS from '../global/COLORS';
 
 const CustomBottomSheet = ({ bottomSheetRef, isOpenBottomSheet, setQuantity, quantity, product, size }) => {
-  const navigation = useNavigation();
   const snapPoints = useMemo(() => ['35%'], []);
   const handleSheetChanges = useCallback((index) => {
-    console.log('HandleSheetChanges', index);
+    console.log('HandleSheetChanges: Do Something', index);
   }, [])
 
   const handleAddQuantity = () => {

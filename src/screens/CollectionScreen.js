@@ -1,10 +1,10 @@
+import React, { useEffect, useState } from 'react'
 import { Dimensions, FlatList, Image, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
-import COLORS from '../global/COLORS'
-import { getCollection } from '../database/firebase-config';
 import { CustomBackButton, CustomMenuDrawerButton } from '../components/CustomButton';
-import FONTS from '../global/FONTS';
+import { getCollection } from '../database/firebase-config';
 import CategoryList from '../components/CategoryList';
+import COLORS from '../global/COLORS'
+import FONTS from '../global/FONTS';
 
 const CollectionScreen = ({ route }) => {
   const { bannerName, headerText, headerDescription } = route.params;
@@ -53,6 +53,7 @@ const CollectionScreen = ({ route }) => {
             <CategoryList data={item} />
           </View>
         )}
+        showsVerticalScrollIndicator={false}
       />
     </View >
   )

@@ -1,10 +1,10 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import COLORS from '../global/COLORS'
-import { CustomBackButton, CustomMenuDrawerButton, CustomTempDeleteButton } from '../components/CustomButton'
-import FONTS from '../global/FONTS'
+import { FlatList, StyleSheet, Text, View } from 'react-native'
+import { CustomBackButton, CustomMenuDrawerButton } from '../components/CustomButton'
 import { getOrderHistory } from '../database/firebase-config'
 import CategoryList from '../components/CategoryList'
+import COLORS from '../global/COLORS'
+import FONTS from '../global/FONTS'
 
 const OrderHistoryDrawer = () => {
   const [orderHistoryDb, setOrderHistoryDb] = useState([]);

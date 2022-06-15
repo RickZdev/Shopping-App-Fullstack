@@ -1,10 +1,10 @@
-import { Image, StyleSheet, Text, View, Switch, ScrollView, TouchableWithoutFeedback, Dimensions, TouchableOpacity } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
+import { Image, StyleSheet, Text, View, ScrollView, Dimensions, TouchableOpacity } from 'react-native'
 import { CustomBackButton } from '../components/CustomButton'
-import FONTS from '../global/FONTS'
-import COLORS from '../global/COLORS'
 import { getOrders } from '../database/firebase-config'
 import { CustomVisaPayment } from '../components/CustomPaymentForm'
+import FONTS from '../global/FONTS'
+import COLORS from '../global/COLORS'
 
 const CheckoutScreen = ({ navigation, route }) => {
   const { total, cartDb } = route.params;

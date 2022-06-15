@@ -1,10 +1,10 @@
-import { Dimensions, ScrollView, StyleSheet, Switch, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
+import { Dimensions, ScrollView, StyleSheet, Switch, Text, View } from 'react-native'
 import { Formik } from 'formik'
 import { addToOrder, deleteCurrentCart } from '../database/firebase-config'
-import FONTS from '../global/FONTS'
 import { CustomPasswordInput, CustomTextInput } from './CustomInput'
 import { CustomMainButton } from './CustomButton'
+import FONTS from '../global/FONTS'
 
 const CustomVisaPayment = ({ total, cartDb, orderDb, navigation, title }) => {
   const [isSavedToCard, setIsSavedToCard] = useState(false);

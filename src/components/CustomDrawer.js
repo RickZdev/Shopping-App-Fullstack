@@ -1,13 +1,12 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { DrawerContentScrollView, DrawerItem, DrawerItemList, useDrawerProgress } from '@react-navigation/drawer'
-import COLORS from '../global/COLORS'
-import { auth, getUserPhoto, logoutUser } from '../database/firebase-config'
-import FONTS from '../global/FONTS'
-import * as ImagePicker from 'expo-image-picker'
-import { updateUserPhoto } from '../database/firebase-config'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer'
 import { useNavigation } from '@react-navigation/native'
-import { SimpleLineIcons, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { auth, getUserPhoto, logoutUser, updateUserPhoto } from '../database/firebase-config'
+import { SimpleLineIcons, Ionicons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker'
+import COLORS from '../global/COLORS'
+import FONTS from '../global/FONTS'
 
 
 const CustomDrawer = (props) => {

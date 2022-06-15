@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { addDoc, collection, doc, getFirestore, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where, getDoc, arrayRemove, arrayUnion, getDocs } from 'firebase/firestore'
-import { getAuth, updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, s, sendPasswordResetEmail } from 'firebase/auth'
+import { addDoc, collection, doc, getFirestore, onSnapshot, query, serverTimestamp, setDoc, updateDoc, where, arrayRemove, arrayUnion } from 'firebase/firestore'
+import { getAuth, updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from 'firebase/auth'
 import { ref, uploadBytes, getDownloadURL, getStorage } from 'firebase/storage'
 import { Alert, ToastAndroid } from "react-native";
 import env from "../config/env";
@@ -114,7 +114,7 @@ const loginUser = async (email, password, navigation) => {
   try {
     const { user } = await signInWithEmailAndPassword(auth, email, password)
     ToastAndroid.showWithGravityAndOffset(
-      `Log in successfully!`,
+      `${user.displayName} Logged in successfully!`,
       ToastAndroid.SHORT,
       ToastAndroid.BOTTOM,
       0, 300)
@@ -132,7 +132,7 @@ const logoutUser = async (navigation) => {
   try {
     await signOut(auth)
     ToastAndroid.showWithGravityAndOffset(
-      `Log out successfully!`,
+      `Logged out successfully!`,
       ToastAndroid.SHORT,
       ToastAndroid.BOTTOM,
       0, 300)
@@ -143,7 +143,7 @@ const logoutUser = async (navigation) => {
 }
 
 // get database
-const getAllProducts = (setProductsDb) => {
+const getAllProducts = (setProductsDb, setMasterData) => {
   const q = query(collection(db, 'products'));
   const unsubscribe = onSnapshot(q, snapshot => {
     let tempProductsDb = [];
@@ -152,32 +152,31 @@ const getAllProducts = (setProductsDb) => {
     })
 
     setProductsDb(tempProductsDb);
+    setMasterData(tempProductsDb);
   })
 
   return unsubscribe;
 }
 
-const getPopular = (setPopularDb, popular, isMounted, setIsLoading) => {
-  if (isMounted) {
-    const ref = query(collection(db, 'products'), where('popular', '==', popular))
-    const ref2 = query(doc(db, 'popular', popular))
-    const unsubscribe = onSnapshot(ref, async (snapshot) => {
-      let tempDb = []
-      snapshot.docs.forEach((doc) => {
-        tempDb.push({ ...doc.data(), id: doc.id });
-      });
-      setPopularDb(tempDb);
-      setIsLoading(false);
-      await updateDoc(ref2, {
-        products: [...tempDb]
-      });
-    })
+const getPopular = (setPopularDb, popular, setIsLoading) => {
+  const ref = query(collection(db, 'products'), where('popular', '==', popular))
+  const ref2 = query(doc(db, 'popular', popular))
+  const unsubscribe = onSnapshot(ref, async (snapshot) => {
+    let tempDb = []
+    snapshot.docs.forEach((doc) => {
+      tempDb.push({ ...doc.data(), id: doc.id });
+    });
+    setPopularDb(tempDb);
+    setIsLoading(false);
+    await updateDoc(ref2, {
+      products: [...tempDb]
+    });
+  })
 
-    return unsubscribe;
-  }
+  return unsubscribe;
 }
 
-const getCategories = (setCategories, categories, isMounted) => {
+const getCategories = (setCategories, categories) => {
   const ref3 = query(collection(db, 'categories'))
   onSnapshot(ref3, snapshot => {
     let tempDb = []
@@ -288,7 +287,7 @@ const getOrderHistory = (setOrderHistoryDb) => {
   const q = query(doc(db, 'users', auth.currentUser.uid))
   const unsubscribe = onSnapshot(q, snapshot => {
     let tempOrderHistoryDb = []
-    snapshot.data().orderHistory.map((item) => {
+    snapshot.data().orderHistory?.map((item) => {
       tempOrderHistoryDb.push(item)
     })
     setOrderHistoryDb(tempOrderHistoryDb)

@@ -1,11 +1,10 @@
 import React, { useRef } from 'react'
-import { Animated, Button, Dimensions, FlatList, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
+import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { CustomMenuDrawerButton } from '../components/CustomButton';
+import { AntDesign } from '@expo/vector-icons';
 import CategoryList from '../components/CategoryList';
 import COLORS from '../global/COLORS';
 import FONTS from '../global/FONTS';
-import { AntDesign } from '@expo/vector-icons';
-
 
 const CategoryScreen = ({ route }) => {
   const listRef = useRef(null);

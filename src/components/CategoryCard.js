@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { FlatList, StyleSheet, Text, TouchableOpacity, View, Image, Button, Alert } from 'react-native'
+import React from 'react'
+import { FlatList, StyleSheet, Text, TouchableOpacity, View, Image, Alert } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import COLORS from '../global/COLORS';
 import FONTS from '../global/FONTS';

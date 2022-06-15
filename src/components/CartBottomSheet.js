@@ -1,13 +1,11 @@
-import { StyleSheet, Text, TouchableOpacity, View, } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
+import { StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native'
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { AntDesign } from '@expo/vector-icons'
-import COLORS from '../global/COLORS'
-import FONTS from '../global/FONTS'
+import { useNavigation } from '@react-navigation/native'
 import { CustomMainButton } from './CustomButton'
 import LottieView from 'lottie-react-native'
-import { useNavigation } from '@react-navigation/native'
+import COLORS from '../global/COLORS'
+import FONTS from '../global/FONTS'
 
 const CartBottomSheet = ({ cartDb, total }) => {
   const navigation = useNavigation();

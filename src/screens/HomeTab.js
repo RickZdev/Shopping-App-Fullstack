@@ -1,12 +1,12 @@
-import { Animated, Image, RefreshControl, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
+import { Animated, Image, RefreshControl, StatusBar, StyleSheet, View } from 'react-native'
 import { CustomMenuDrawerButton } from '../components/CustomButton';
+import { getPopular, getCategories } from '../database/firebase-config'
+import { CustomHomeSkeleton } from '../components/CustomSkeletonCard';
 import { useScrollToTop } from '@react-navigation/native';
-import { auth, getPopular, getCategories } from '../database/firebase-config'
 import HorizontalCard from '../components/HorizontalCard';
 import Banner from '../components/Banner';
 import CategoryCard from '../components/CategoryCard';
-import { CustomHomeSkeleton } from '../components/CustomSkeletonCard';
 
 const HomeTab = ({ navigation }) => {
   const scrolling = useRef(new Animated.Value(0)).current;
@@ -19,20 +19,32 @@ const HomeTab = ({ navigation }) => {
   const [bestSellers, setBestSellers] = useState([])
   const [categories, setCategories] = useState([]);
   const [isLoading, setIsloading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   const ref = useRef(null);
   useScrollToTop(ref);
 
   useEffect(() => {
-    let isMounted = true;
-    getPopular(setNewArrival, 'New arrivals', isMounted, setIsloading)
-    getPopular(setBestSellers, 'Best sellers', isMounted, setIsloading)
-    getCategories(setCategories, categories, isMounted);
+    let isMount = true;
+    getPopular(setNewArrival, 'New arrivals', setIsloading)
+    getPopular(setBestSellers, 'Best sellers', setIsloading)
+    getCategories(setCategories, categories);
 
     return () => {
-      isMounted = false;
+      isMount = false;
     }
   }, [])
+
+  const onRefresh = () => {
+    setRefreshing(true)
+    getPopular(setNewArrival, 'New arrivals', setIsloading)
+    getPopular(setBestSellers, 'Best sellers', setIsloading)
+    getCategories(setCategories, categories);
+
+    setTimeout(() => {
+      setRefreshing(false)
+    }, 500)
+  }
 
   return (
     <>
@@ -56,6 +68,12 @@ const HomeTab = ({ navigation }) => {
         style={styles.scrollViewContainer}
         ref={ref}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
       >
         <View style={styles.scrollViewWrapper}>
           {!isLoading ?

@@ -2,9 +2,9 @@
   "expo": {
     "name": "Shopping App",
     "slug": "shopping-app",
-    "description": "My first personal project!",
+    "description": "My First Full-Stack Personal Project Application",
     "version": "1.0.0",
-    "orientation": "default",
+    "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {

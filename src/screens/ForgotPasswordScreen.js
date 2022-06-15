@@ -1,10 +1,10 @@
-import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
-import COLORS from '../global/COLORS'
+import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { CustomTextInput } from '../components/CustomInput'
 import { CustomMainButton } from '../components/CustomButton'
 import { resetPassword } from '../database/firebase-config'
 import { Feather } from '@expo/vector-icons'
+import COLORS from '../global/COLORS'
 import FONTS from '../global/FONTS'
 
 const ForgotPasswordScreen = ({ navigation }) => {
@@ -15,7 +15,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
     setEmail('')
   }
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView style={styles.container}>
       <StatusBar />
       <View style={styles.containerWrapper}>
         <View style={styles.header}>
@@ -29,6 +29,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
         <View style={styles.form}>
           <CustomTextInput label={'Email Address'} onchangeValue={(text) => setEmail(text)} value={email} keyboardType={'email-address'} customStyle={styles.customInput} />
           <CustomMainButton text={'Reset Password'} handlePress={handleResetPassword} />
+
         </View>
         <TouchableOpacity style={styles.closeIcon} onPress={() => navigation.goBack()}>
           <Feather name="x" size={24} />
@@ -43,10 +44,9 @@ export default ForgotPasswordScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.white,
   },
   containerWrapper: {
-    flex: 1,
     paddingHorizontal: 32,
     paddingBottom: 20,
   },

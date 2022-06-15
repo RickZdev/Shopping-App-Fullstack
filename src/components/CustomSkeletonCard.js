@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { StyleSheet, View } from 'react-native'
 import { SkeletonContainer, Skeleton } from "@nlazzos/react-native-skeleton";
 
 const CustomHomeSkeleton = () => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { View, StyleSheet, StatusBar, Text } from 'react-native';
-import { Octicons, Feather, AntDesign, Ionicons } from '@expo/vector-icons'
+import { Octicons, Feather, AntDesign, MaterialIcons } from '@expo/vector-icons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeStack, CartStack } from './AppStack';
 import { getNumberOfCart } from '../database/firebase-config';
@@ -70,7 +70,7 @@ const BottomTab = () => {
         <Tab.Screen name="SettingsTab" component={SettingsTab}
           options={{
             tabBarIcon: ({ focused }) => (
-              <Ionicons name='settings-outline' size={24} color={focused ? COLORS.black : 'gray'} />
+              <MaterialIcons name="add-circle-outline" size={24} color={focused ? COLORS.black : 'gray'} />
             )
           }}
         />

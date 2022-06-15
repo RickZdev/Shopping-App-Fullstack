@@ -1,10 +1,10 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import COLORS from '../global/COLORS'
-import FONTS from '../global/FONTS'
 import { CustomMainButton } from './CustomButton'
 import { addToOrderHistory, deleteOrderReceived } from '../database/firebase-config'
+import COLORS from '../global/COLORS'
+import FONTS from '../global/FONTS'
 
 const CategoryList = ({ data, customDeleteButton, disableNavigation, isOrderScreen, isOrderHistoryScreen }) => {
   const navigation = useNavigation();

@@ -1,19 +1,17 @@
-import { FlatList, StyleSheet, Text, TextInput, View } from 'react-native'
+import { FlatList, StyleSheet, TextInput, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { MaterialIcons, Feather, AntDesign, Ionicons } from '@expo/vector-icons'
-import COLORS from '../global/COLORS'
+import { MaterialIcons, Feather } from '@expo/vector-icons'
 import { getAllProducts } from '../database/firebase-config'
 import CategoryList from '../components/CategoryList'
+import COLORS from '../global/COLORS'
 
 const SearchTab = () => {
   const [productsDb, setProductsDb] = useState([]);
-  const [productsDb2, setProductsDb2] = useState([]);
   const [masterData, setMasterData] = useState([])
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState();
 
   useEffect(() => {
-    getAllProducts(setProductsDb);
-    setMasterData(productsDb)
+    getAllProducts(setProductsDb, setMasterData);
   }, [])
 
   const searchFilter = (text) => {
@@ -22,9 +20,9 @@ const SearchTab = () => {
         const itemData = item.productName.toLowerCase().includes(text.toLowerCase());
         return itemData
       })
-      setProductsDb2(newData);
+      setProductsDb(newData);
     } else {
-      setProductsDb2([]);
+      setProductsDb(masterData);
     }
     setSearchText(text)
   }
@@ -44,7 +42,7 @@ const SearchTab = () => {
         </View>
       </View>
       <FlatList
-        data={productsDb2}
+        data={productsDb}
         keyExtractor={(_item, index) => index.toString()}
         renderItem={({ item }) => (
           <View style={{ paddingTop: 5, }}>

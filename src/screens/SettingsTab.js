@@ -5,10 +5,10 @@ import { CustomTextInput } from '../components/CustomInput'
 import { Formik } from 'formik'
 import { Picker } from "@react-native-picker/picker";
 import { addProducts } from '../database/firebase-config';
+import * as ImagePicker from 'expo-image-picker'
+import CheckBox from 'expo-checkbox';
 import COLORS from '../global/COLORS'
 import FONTS from '../global/FONTS'
-import CheckBox from 'expo-checkbox';
-import * as ImagePicker from 'expo-image-picker'
 
 const SettingsTab = () => {
   const [smallCheckbox, setSmallCheckbox] = useState(false)
@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     marginHorizontal: 47,
+    paddingBottom: 20,
   },
   customInputStyle: {
     marginBottom: 20,

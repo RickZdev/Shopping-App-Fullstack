@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native'
+import { Feather } from '@expo/vector-icons'
 import COLORS from '../global/COLORS'
 import FONTS from '../global/FONTS'
-import { Feather } from '@expo/vector-icons'
 
 const CustomTextInput = ({ label, onchangeValue, value, customStyle, keyboardType }) => {
   return (
