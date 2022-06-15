@@ -1,5 +1,6 @@
 # My First Full-Stack Mobile Application Project
 ## E-Commerce Application (DRKSDE) 
+created from May 18, 2022 -  Jun 15, 2022
 - A vans-styled e-commerce mobile application design created by James de Sousa [@jamesdesousa](https://www.figma.com/@jamesdesousa) from Figma. 
 Here's the link of the design. 
 ```bash
