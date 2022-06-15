@@ -32,4 +32,4 @@ const prodEnvironmentVariables = {
   PROD_BACKEND_URL_APP_ID,
 }
 
-export default __DEV__ ? devEnvironmentVariables : prodEnvironmentVariables;
+export default devEnvironmentVariables;
