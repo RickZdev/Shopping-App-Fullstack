@@ -3,14 +3,15 @@ import { addDoc, collection, doc, getFirestore, onSnapshot, query, serverTimesta
 import { getAuth, updateProfile, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, s, sendPasswordResetEmail } from 'firebase/auth'
 import { ref, uploadBytes, getDownloadURL, getStorage } from 'firebase/storage'
 import { Alert, ToastAndroid } from "react-native";
+import env from "../config/env";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCRrjMVXW0zRWWBxIM9NFrr-CjT5_Vgpcs",
-  authDomain: "shopping-app-be469.firebaseapp.com",
-  projectId: "shopping-app-be469",
-  storageBucket: "shopping-app-be469.appspot.com",
-  messagingSenderId: "780380821788",
-  appId: "1:780380821788:web:a5bd10bb51ea131b8402d9"
+  apiKey: env.DEV_BACKEND_URL_API_KEY,
+  authDomain: env.DEV_BACKEND_URL_AUTH_DOMAIN,
+  projectId: env.DEV_BACKEND_URL_PROJECT_ID,
+  storageBucket: env.DEV_BACKEND_URL_STORAGE_BUCKET,
+  messagingSenderId: env.DEV_BACKEND_URL_MESSAGING_SENDER_ID,
+  appId: env.DEV_BACKEND_URL_APP_ID
 };
 
 // Initialize Firebase
@@ -426,5 +427,5 @@ export {
   auth, db, storage, addAuthenticatedUser, updateUserPhoto, getUserPhoto, resetPassword, loginUser, logoutUser,
   getPopular, getCategories, getCart, getNumberOfCart, getLikes, getNumberOfLikes, getOrders, getOrderHistory, getCollection, getAllProducts,
   addProducts, addToCart, addLike, addToOrder, addToOrderHistory,
-  deleteToCart, deleteCurrentCart, deleteOrderReceived
+  deleteToCart, deleteCurrentCart, deleteOrderReceived,
 }
