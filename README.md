@@ -12,6 +12,7 @@ https://www.figma.com/community/file/1104390817009696266
 
 # Technologies used
 ## Front-End Tech
+- Javascript
 - React Native
 - React Native Navigation v5
 - StyleSheet API
